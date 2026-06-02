@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './SmartStubLanding.css'; // We'll move the styles here
+import './SmartStubLanding.css';
+import logo from '../assets/logo.webp';
+import { CreateUser } from '../api/api_client';
 
 const SmartStubLanding = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -38,6 +40,7 @@ const SmartStubLanding = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (email.trim()) {
+      CreateUser({ email });
       setConfirmed(true);
     }
   };
@@ -48,7 +51,7 @@ const SmartStubLanding = () => {
       <nav id="mainNav" className={scrolled ? 'scrolled' : ''}>
         <a href="#" className="nav-logo">
           <img
-            src="https://bitdlive.com/wp-content/uploads/2026/05/logo.png"
+            src={logo}
             alt="SmartStub"
           />
         </a>
@@ -70,9 +73,9 @@ const SmartStubLanding = () => {
           </li>
         </ul>
         <div className="nav-cta">
-          <a href="#" className="btn-ghost">
+          {/* <a href="#" className="btn-ghost">
             Sign In
-          </a>
+          </a> */}
           <a href="#waitlist" className="btn-filled">
             Get Early Access
           </a>
@@ -666,9 +669,9 @@ const SmartStubLanding = () => {
                   decoding="async"
                 />
               </div>
-              <div className="tax-savings-badge">
+              {/* <div className="tax-savings-badge">
                 💵 Keep up to $7,247 more per year in Texas vs. California
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -811,7 +814,9 @@ const SmartStubLanding = () => {
           <div
             className="confirmed-msg"
             id="confirmedMsg"
-            style={{ display: confirmed ? 'flex' : 'none' }}
+            style={{ display: confirmed ? 'flex' : 'none',
+              marginTop: '10px'
+             }}
           >
             ✓ &nbsp;You're on the list! We'll be in touch when we launch.
           </div>
@@ -827,7 +832,7 @@ const SmartStubLanding = () => {
       <footer>
         <div className="footer-logo">
           <img
-            src="https://bitdlive.com/wp-content/uploads/2026/05/logo.png"
+            src={logo}
             alt="SmartStub"
           />
         </div>
