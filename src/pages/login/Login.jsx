@@ -28,7 +28,7 @@ export default function Login() {
       }
       localStorage.setItem("token", token);
       localStorage.setItem("adminEmail", email.trim());
-      toast.success("Welcome back, Admin!");
+      toast.success("Welcome Back, Admin !");
       navigate("/home", { replace: true });
     } catch (err) {
       const msg =

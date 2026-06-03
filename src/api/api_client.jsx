@@ -8,3 +8,7 @@ export const LoginUser = async (data) => {
 export const GetSubscriber = async (data) => {
     return await instance.get('/admin/subscriber-list', { params: data })
 }
+
+export const SubscriberGraph = async (data) => {
+    return await instance.get('/admin/subscriber-graph', { params: data })
+}

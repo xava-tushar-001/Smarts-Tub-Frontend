@@ -1,4 +1,4 @@
-import { HiOutlineHome, HiOutlineShoppingBag } from "react-icons/hi2";
+import { HiOutlineHome, HiOutlineUsers } from "react-icons/hi2";
 
 /**
  * Sidebar navigation items: title, link, icon, optional end (exact path match for NavLink)
@@ -13,7 +13,7 @@ export const sidebarMenu = [
   {
     title: "Subscriber",
     link: "/subscriber",
-    icon: HiOutlineShoppingBag,
+    icon: HiOutlineUsers,
     end: true,
   },
 ];

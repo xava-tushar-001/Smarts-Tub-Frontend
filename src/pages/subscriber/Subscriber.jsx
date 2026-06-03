@@ -54,15 +54,23 @@ export default function Subscriber() {
 
     return (
         <div className="p-6 lg:p-8">
-            <div className="mb-6">
-                <h1 className="text-2xl font-semibold tracking-tight text-black">Subscribers</h1>
-                <p className="mt-1 text-sm text-black/60">Manage your subscribers</p>
+            <div className="mb-8">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text">
+                            Subscribers
+                        </h1>
+                        <p className="mt-1">
+                            Manage your subscribers
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <div className="mb-4 flex items-center justify-between gap-3">
                 <input
                     type="text"
-                    placeholder="Search by subscriber, email"
+                    placeholder="Search by Subscriber, Email"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="w-full max-w-md rounded-lg border border-black/15 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100"
@@ -88,7 +96,7 @@ export default function Subscriber() {
                             ) : subscriber.length === 0 ? (
                                 <tr>
                                     <td colSpan={6} className="px-4 py-12 text-center text-black/50">
-                                        No subscriber found.
+                                        No Subscriber Found
                                     </td>
                                 </tr>
                             ) : (
@@ -118,7 +126,7 @@ export default function Subscriber() {
 
                 <div className="flex flex-wrap items-center justify-between gap-3 border-t border-black/10 px-4 py-3">
                     <p className="text-sm text-black/60">
-                        Page {meta.page} of {meta.totalPages} · {meta.total} subscriber{meta.total !== 1 ? "s" : ""}
+                        Page {meta.page} of {meta.totalPages} · {meta.total} Subscriber{meta.total !== 1 ? "s" : ""}
                     </p>
                     <div className="flex gap-2">
                         <button
