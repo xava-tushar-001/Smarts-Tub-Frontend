@@ -34,3 +34,23 @@ export const GetProfile = async () => {
 export const UpdateProfile = async (data) => {
     return await instance.put('/users/profile', data)
 }
+
+// Salary slip analysis
+export const UploadSalarySlip = async (file) => {
+    const formData = new FormData();
+    formData.append('slip', file);
+    // Don't set Content-Type manually - the browser needs to add its own multipart boundary.
+    return await instance.post('/users/salary-slips', formData)
+}
+
+export const GetSalarySlips = async (params) => {
+    return await instance.get('/users/salary-slips', { params })
+}
+
+export const GetSalarySlip = async (id) => {
+    return await instance.get(`/users/salary-slips/${id}`)
+}
+
+export const GetSalarySlipFile = async (id) => {
+    return await instance.get(`/users/salary-slips/${id}/file`, { responseType: 'blob' })
+}

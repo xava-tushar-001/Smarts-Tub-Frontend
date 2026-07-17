@@ -8,6 +8,9 @@ import Register from "../pages/register/Register";
 import Home from "../pages/Home";
 import Profile from "../pages/profile/Profile";
 import EditProfile from "../pages/profile/EditProfile";
+import SalarySlips from "../pages/salarySlips/SalarySlips";
+import UploadSalarySlip from "../pages/salarySlips/UploadSalarySlip";
+import SalarySlipDetail from "../pages/salarySlips/SalarySlipDetail";
 import LandingPage from "../pages/LandingPage";
 
 export const router = createBrowserRouter([
@@ -32,6 +35,9 @@ export const router = createBrowserRouter([
           { path: "/home", element: <Home /> },
           { path: "/profile", element: <Profile /> },
           { path: "/profile/edit", element: <EditProfile /> },
+          { path: "/salary-slips", element: <SalarySlips /> },
+          { path: "/salary-slips/upload", element: <UploadSalarySlip /> },
+          { path: "/salary-slips/:id", element: <SalarySlipDetail /> },
         ],
       },
     ],
