@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { GetSubscriber } from '../../api/api_client';
+import { toast } from "react-toastify";
 
 export default function Subscriber() {
     const [page, setPage] = useState(1);
@@ -41,7 +42,7 @@ export default function Subscriber() {
                 err.message ??
                 "Could not load subscriber.";
             toast.error(typeof msg === "string" ? msg : "Could not load subscriber.");
-            setsubscriber([]);
+            setSubscriber([]);
         } finally {
             setLoading(false);
         }

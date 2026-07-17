@@ -1,4 +1,4 @@
-import { HiOutlineHome, HiOutlineUsers } from "react-icons/hi2";
+import { HiOutlineHome, HiOutlineUsers, HiOutlineUserGroup, HiOutlineUserCircle } from "react-icons/hi2";
 
 /**
  * Sidebar navigation items: title, link, icon, optional end (exact path match for NavLink)
@@ -6,8 +6,14 @@ import { HiOutlineHome, HiOutlineUsers } from "react-icons/hi2";
 export const sidebarMenu = [
   {
     title: "Home",
-    link: "/home",
+    link: "/",
     icon: HiOutlineHome,
+    end: true,
+  },
+  {
+    title: "Users",
+    link: "/users",
+    icon: HiOutlineUserGroup,
     end: true,
   },
   {
@@ -16,4 +22,10 @@ export const sidebarMenu = [
     icon: HiOutlineUsers,
     end: true,
   },
+  // {
+  //   title: "Profile",
+  //   link: "/profile",
+  //   icon: HiOutlineUserCircle,
+  //   end: true,
+  // },
 ];
