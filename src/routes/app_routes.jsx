@@ -11,24 +11,24 @@ export const router = createBrowserRouter([
   {
     children: [
       { path: "/", element: <LandingPage /> },
-        { path: "/login", element: <Login /> }
     ],
   },
   {
-    // element: <Public />,
-    // children: [
-    // ],
+    element: <Public />,
+    children: [
+      { path: "/login", element: <Login /> }
+    ],
   },
   {
-    // element: <Protected />,
-    // children: [
-    //   {
-    //     element: <MainLayout />,
-    //     children: [
-    //       { path: "/home", element: <Home /> },
-    //     ],
-    //   },
-    // ],
+    element: <Protected />,
+    children: [
+      {
+        element: <MainLayout />,
+        children: [
+          { path: "/home", element: <Home /> },
+        ],
+      },
+    ],
   },
   { path: "*", element: <WildcardRedirect /> },
 ]);

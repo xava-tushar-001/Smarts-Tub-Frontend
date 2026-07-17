@@ -6,5 +6,5 @@ export const LoginUser = async (data) => {
 }
 
 export const CreateUser = async (data) => {
-    return await instance.post('/users/create', data)
+    return await instance.post('/users/subscriber', data)
 }

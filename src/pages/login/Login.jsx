@@ -43,7 +43,9 @@ export default function Login() {
   return (
     <div className="flex min-h-screen w-full">
       {/* LEFT SIDEBAR - Branding & Features */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-900 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br
+from-[#07112b] via-[#0C1F4B] to-[#0C1F4B]
+relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
@@ -66,7 +68,7 @@ export default function Login() {
           {/* Logo on sidebar */}
           <div className="flex items-center gap-3">
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-2">
-              <img src={MianLogo} alt="Logo" className="h-10 w-auto brightness-0 invert" />
+              <img src={MianLogo} alt="Logo" className="h-10 w-auto" />
             </div>
             <span className="text-white text-xl font-bold tracking-tight">SmartStub</span>
           </div>
@@ -74,13 +76,16 @@ export default function Login() {
           {/* Testimonial / Quote */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mt-2">
                 <span className="text-yellow-400 text-sm">✦</span>
                 <span className="text-white/80 text-xs font-medium">Trusted by 10,000+ users</span>
               </div>
-              <h2 className="text-white text-3xl font-bold leading-tight">
-                Know Every Dollar<br />
-                <span className="text-indigo-300">You've Earned.</span>
+              <h2 className="text-white text-3xl font-bold leading-tight italic">
+                Know Every
+                <span className="text-green-300 underline ml-2">Dollar</span>
+                <br />
+                <span className="italic">You've</span>
+                <span className="text-green-300 italic"> Earned</span>
               </h2>
               <p className="text-indigo-200/80 text-base leading-relaxed">
                 SmartStub decodes your paycheck, catches errors, and helps you take control of your finances with AI-powered insights.
@@ -142,11 +147,11 @@ export default function Login() {
           </div>
 
           {/* Trust badge */}
-          <div className="flex items-center gap-2 text-indigo-300/60 text-xs">
+          <div className="flex items-center gap-2 text-indigo-300/60 text-xs mt-2">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M2.166 4.999A10 10 0 0010 20a10 10 0 0010-10c0-1.667-.4-3.242-1.107-4.666L10 10 2.166 5z" clipRule="evenodd" />
             </svg>
-            <span>Bank-level encryption • 100% secure</span>
+            <span>100% secure</span>
           </div>
         </div>
       </div>
@@ -155,14 +160,14 @@ export default function Login() {
       <div className="w-full lg:w-1/2 flex items-center justify-center bg-white px-6 py-12 sm:px-8 lg:px-12 overflow-y-auto">
         <div className="w-full max-w-md">
           {/* Mobile Logo (visible only on small screens) */}
-          <div className="lg:hidden flex justify-center mb-8">
-            <div className="bg-indigo-50 rounded-2xl p-3">
-              <img src={MianLogo} alt="Logo" className="h-10 w-auto" />
+          <div className="lg:hidden flex justify-center mb-4">
+            <div className="rounded-2xl p-3">
+              <img src={MianLogo} alt="Logo" className="h-20 w-auto" />
             </div>
           </div>
 
           <div className="text-center lg:text-left">
-            <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Welcome back</h1>
+            <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Welcome Back</h1>
             <p className="mt-2 text-slate-500">Sign in to your account to continue</p>
           </div>
 
@@ -170,7 +175,7 @@ export default function Login() {
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                Email address
+                Email Address
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -186,7 +191,7 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-3 text-slate-800 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 hover:border-slate-300"
-                  placeholder="you@company.com"
+                  placeholder="user@email.com"
                 />
               </div>
             </div>
@@ -198,7 +203,7 @@ export default function Login() {
                   Password
                 </label>
                 <a href="#" className="text-sm text-indigo-500 hover:text-indigo-600 transition-colors font-medium">
-                  Forgot password?
+                  Forgot Password?
                 </a>
               </div>
               <div className="relative">
@@ -215,28 +220,16 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-3 text-slate-800 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 hover:border-slate-300"
-                  placeholder="Enter your password"
+                  placeholder="password"
                 />
               </div>
-            </div>
-
-            {/* Remember Me */}
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                type="checkbox"
-                className="h-4 w-4 rounded border-slate-300 text-indigo-500 focus:ring-indigo-400 focus:ring-offset-0"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-600">
-                Remember me for 30 days
-              </label>
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:from-indigo-600 hover:to-indigo-700 hover:shadow-indigo-500/35 hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+              className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:from-indigo-600 hover:to-indigo-800 hover:shadow-indigo-500/35 hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
