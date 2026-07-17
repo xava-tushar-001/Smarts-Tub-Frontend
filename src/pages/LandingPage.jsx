@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import './SmartStubLanding.css';
 import logo from '../assets/logo.webp';
 import { CreateUser } from '../api/api_client';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const SmartStubLanding = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -37,16 +39,25 @@ const SmartStubLanding = () => {
   }, []);
 
   // Waitlist submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email.trim()) {
-      CreateUser({ email });
+    if (!email.trim()) return;
+    try {
+      await CreateUser({ email: email.trim() });
       setConfirmed(true);
+    } catch (err) {
+      const msg =
+        err.response?.data?.message ??
+        err.message ??
+        "Something went wrong. Please try again.";
+      toast.error(typeof msg === "string" ? msg : "Something went wrong.");
     }
   };
 
+  const isLoggedIn = !!localStorage.getItem('token');
+
   return (
-    <>
+    <div className="smartstub-landing">
       {/* ── NAV ── */}
       <nav id="mainNav" className={scrolled ? 'scrolled' : ''}>
         <a href="#" className="nav-logo">
@@ -73,12 +84,20 @@ const SmartStubLanding = () => {
           </li>
         </ul>
         <div className="nav-cta">
-          {/* <a href="#" className="btn-ghost">
-            Sign In
-          </a> */}
-          <a href="#waitlist" className="btn-filled">
-            Get Early Access
-          </a>
+          {isLoggedIn ? (
+            <Link to="/home" className="btn-filled">
+              Profile
+            </Link>
+          ) : (
+            <>
+              <Link to="/login" className="btn-ghost">
+                Login
+              </Link>
+              <Link to="/register" className="btn-filled">
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
         <button className="hamburger" aria-label="Menu">
           <span></span>
@@ -845,7 +864,7 @@ const SmartStubLanding = () => {
           </span>
         </div>
       </footer>
-    </>
+    </div>
   );
 };
 

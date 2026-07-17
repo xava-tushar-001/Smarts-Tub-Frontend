@@ -4,7 +4,10 @@ import Protected from "./Protected";
 import WildcardRedirect from "./WildcardRedirect";
 import MainLayout from "./Layout";
 import Login from "../pages/login/Login";
+import Register from "../pages/register/Register";
 import Home from "../pages/Home";
+import Profile from "../pages/profile/Profile";
+import EditProfile from "../pages/profile/EditProfile";
 import LandingPage from "../pages/LandingPage";
 
 export const router = createBrowserRouter([
@@ -16,7 +19,8 @@ export const router = createBrowserRouter([
   {
     element: <Public />,
     children: [
-      { path: "/login", element: <Login /> }
+      { path: "/login", element: <Login /> },
+      { path: "/register", element: <Register /> }
     ],
   },
   {
@@ -26,6 +30,8 @@ export const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
           { path: "/home", element: <Home /> },
+          { path: "/profile", element: <Profile /> },
+          { path: "/profile/edit", element: <EditProfile /> },
         ],
       },
     ],

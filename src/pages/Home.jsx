@@ -1,27 +1,29 @@
-import { useCallback, useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { HiOutlineUserCircle } from "react-icons/hi2";
+import { GetProfile } from "../api/api_client";
 
 export default function Home() {
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    GetProfile()
+      .then((res) => setName(res.data?.body?.user?.name ?? ""))
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="p-6 lg:p-8">
-      <h1 className="text-2xl font-semibold tracking-tight text-black">
-        Welcome to <span className="text-[#EA2859]">Smart Hub</span>
-      </h1>
-      <p className="mt-2 text-black/60">You are signed in. Use the sidebar to open Orders.</p>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight text-slate-800">
+          Welcome{name ? `, ${name}` : ""}
+        </h1>
+        <p className="mt-1 text-slate-500">
+          You are signed in.
+        </p>
+      </div>
 
-
+    
     </div>
   );
 }

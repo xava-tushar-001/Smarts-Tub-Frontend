@@ -247,8 +247,8 @@ relative overflow-hidden">
 
           {/* Sign Up Link */}
           <p className="mt-8 text-center text-sm text-slate-500">
-            Don't have an account?{" "}
-            <a href="#" className="font-semibold text-indigo-500 hover:text-indigo-600 transition-colors">
+            Don&apos;t have an account?{" "}
+            <a href="/register" className="font-semibold text-indigo-500 hover:text-indigo-600 transition-colors">
               Create free account
             </a>
           </p>
