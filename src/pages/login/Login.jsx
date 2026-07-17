@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { LoginUser } from "../../api/api_client";
+import GoogleAuthButton from "../components/GoogleAuthButton";
 import MianLogo from "../../assets/logo.webp";
 
 export default function Login() {
@@ -248,9 +249,9 @@ relative overflow-hidden">
           {/* Sign Up Link */}
           <p className="mt-8 text-center text-sm text-slate-500">
             Don&apos;t have an account?{" "}
-            <a href="/register" className="font-semibold text-indigo-500 hover:text-indigo-600 transition-colors">
+            <Link to="/register" className="font-semibold text-indigo-500 hover:text-indigo-600 transition-colors">
               Create free account
-            </a>
+            </Link>
           </p>
 
           {/* Divider */}
@@ -259,8 +260,12 @@ relative overflow-hidden">
               <div className="w-full border-t border-slate-200"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-slate-400">Secure access</span>
+              <span className="px-4 bg-white text-slate-400">Or continue with</span>
             </div>
+          </div>
+
+          <div className="mb-8">
+            <GoogleAuthButton />
           </div>
 
           {/* Trust badges */}

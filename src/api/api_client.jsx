@@ -22,6 +22,10 @@ export const ResendOtp = async (data) => {
     return await instance.post('/users/resend-otp', data)
 }
 
+export const GoogleLogin = async (data) => {
+    return await instance.post('/users/google-login', data)
+}
+
 // Profile
 export const GetProfile = async () => {
     return await instance.get('/users/profile')

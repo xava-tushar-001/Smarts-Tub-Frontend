@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { RegisterUser, VerifyOtp, ResendOtp } from "../../api/api_client";
+import GoogleAuthButton from "../components/GoogleAuthButton";
 import MianLogo from "../../assets/logo.webp";
 
 export default function Register() {
@@ -267,11 +268,24 @@ export default function Register() {
                 </button>
               </form>
 
+              {/* Divider */}
+              <div className="relative my-8">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-slate-200"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 bg-white text-slate-400">Or continue with</span>
+                </div>
+              </div>
+
+              <GoogleAuthButton />
+
+
               <p className="mt-8 text-center text-sm text-slate-500">
                 Already have an account?{" "}
-                <a href="/login" className="font-semibold text-indigo-500 hover:text-indigo-600 transition-colors">
+                <Link to="/login" className="font-semibold text-indigo-500 hover:text-indigo-600 transition-colors">
                   Sign in
-                </a>
+                </Link>
               </p>
             </>
           ) : (
