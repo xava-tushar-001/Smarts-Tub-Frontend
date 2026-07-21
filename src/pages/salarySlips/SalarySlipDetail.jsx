@@ -134,10 +134,11 @@ export default function SalarySlipDetail() {
     );
   }
 
+  const allChecks = Array.isArray(slip.checks) ? slip.checks : [];
   const checksByStatus = {
-    pass: (slip.checks ?? []).filter((c) => c.status === "pass"),
-    warning: (slip.checks ?? []).filter((c) => c.status === "warning"),
-    error: (slip.checks ?? []).filter((c) => c.status === "error"),
+    pass: allChecks.filter((c) => c.status === "pass"),
+    warning: allChecks.filter((c) => c.status === "warning"),
+    error: allChecks.filter((c) => c.status === "error"),
   };
 
   return (
@@ -196,7 +197,7 @@ export default function SalarySlipDetail() {
       {slip.status === "completed" && (
         <>
           {/* Summary */}
-          <div className="mb-6 max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="mb-6 max-w-5xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-sm font-semibold text-slate-700">Summary</h2>
             <p className="mt-2 text-slate-600">{slip.summary}</p>
             <div className="mt-4 flex flex-wrap gap-3">
