@@ -47,6 +47,10 @@ export const GetSalarySlips = async (params) => {
     return await instance.get('/users/salary-slips', { params })
 }
 
+export const GetSalarySlipStats = async () => {
+    return await instance.get('/users/salary-slips/stats')
+}
+
 export const GetSalarySlip = async (id) => {
     return await instance.get(`/users/salary-slips/${id}`)
 }
