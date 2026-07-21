@@ -1,4 +1,4 @@
-import { HiOutlineHome, HiOutlineShoppingBag, HiOutlineUserCircle, HiOutlineDocumentMagnifyingGlass } from "react-icons/hi2";
+import { HiOutlineHome, HiOutlineShoppingBag, HiOutlineUserCircle, HiOutlineDocumentMagnifyingGlass, HiOutlineCreditCard } from "react-icons/hi2";
 
 /**
  * Sidebar navigation items: title, link, icon, optional end (exact path match for NavLink)
@@ -15,6 +15,12 @@ export const sidebarMenu = [
     link: "/salary-slips",
     icon: HiOutlineDocumentMagnifyingGlass,
     end: false,
+  },
+  {
+    title: "Billing",
+    link: "/billing",
+    icon: HiOutlineCreditCard,
+    end: true,
   },
   {
     title: "Profile",

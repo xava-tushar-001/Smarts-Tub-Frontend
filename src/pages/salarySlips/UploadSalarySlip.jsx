@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { HiOutlineArrowLeft, HiOutlineDocumentArrowUp, HiOutlineXMark } from "react-icons/hi2";
-import { UploadSalarySlip as uploadSalarySlipRequest } from "../../api/api_client";
+import { HiOutlineArrowLeft, HiOutlineDocumentArrowUp, HiOutlineXMark, HiOutlineLockClosed } from "react-icons/hi2";
+import { UploadSalarySlip as uploadSalarySlipRequest, GetBillingStatus } from "../../api/api_client";
 
 const ACCEPTED_TYPES = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
@@ -29,6 +29,17 @@ export default function UploadSalarySlip() {
   const [file, setFile] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [usage, setUsage] = useState(null);
+  const [loadingUsage, setLoadingUsage] = useState(true);
+
+  useEffect(() => {
+    GetBillingStatus()
+      .then((res) => setUsage(res.data?.body?.usage ?? null))
+      .catch(() => {})
+      .finally(() => setLoadingUsage(false));
+  }, []);
+
+  const limitReached = usage && usage.count >= usage.limit;
 
   function validateAndSetFile(candidate) {
     if (!candidate) return;
@@ -69,6 +80,9 @@ export default function UploadSalarySlip() {
       }
       navigate(`/salary-slips/${slip.id}`, { replace: true });
     } catch (err) {
+      if (err.response?.data?.body?.limit_reached) {
+        setUsage({ count: err.response.data.body.used, limit: err.response.data.body.limit });
+      }
       toast.error(readError(err, "Could not analyze the salary slip."));
     } finally {
       setUploading(false);
@@ -90,6 +104,29 @@ export default function UploadSalarySlip() {
         <p className="mt-1 text-slate-500">AI will analyze it for errors, warnings, and missing information.</p>
       </div>
 
+      {!loadingUsage && usage && (
+        <p className="mb-4 max-w-5xl text-sm text-slate-500">
+          {usage.count} of {usage.limit} payslips used this month
+        </p>
+      )}
+
+      {limitReached ? (
+        <div className="max-w-5xl rounded-2xl border border-indigo-200 bg-indigo-50 p-8 text-center">
+          <HiOutlineLockClosed className="mx-auto h-8 w-8 text-indigo-500" aria-hidden />
+          <p className="mt-3 font-semibold text-slate-800">
+            You've used all {usage.limit} payslip uploads this month
+          </p>
+          <p className="mt-1 text-sm text-slate-600">
+            Upgrade to Pro for up to 12 uploads/month and more.
+          </p>
+          <Link
+            to="/billing"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-indigo-500/25 transition hover:bg-indigo-600 hover:shadow-indigo-500/35"
+          >
+            Upgrade to Pro
+          </Link>
+        </div>
+      ) : (
       <div className="max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <div
           onDragOver={(e) => {
@@ -144,6 +181,7 @@ export default function UploadSalarySlip() {
           {uploading ? "Analyzing your salary slip…" : "Analyze Salary Slip"}
         </button>
       </div>
+      )}
     </div>
   );
 }

@@ -54,3 +54,20 @@ export const GetSalarySlip = async (id) => {
 export const GetSalarySlipFile = async (id) => {
     return await instance.get(`/users/salary-slips/${id}/file`, { responseType: 'blob' })
 }
+
+export const RetrySalarySlip = async (id) => {
+    return await instance.post(`/users/salary-slips/${id}/retry`)
+}
+
+// Billing
+export const GetBillingStatus = async () => {
+    return await instance.get('/users/billing/status')
+}
+
+export const CreateCheckoutSession = async () => {
+    return await instance.post('/users/billing/checkout')
+}
+
+export const CreatePortalSession = async () => {
+    return await instance.post('/users/billing/portal')
+}

@@ -3,12 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   HiOutlineArrowLeft,
+  HiOutlineArrowPath,
   HiOutlineEye,
   HiOutlineCheckCircle,
   HiOutlineExclamationTriangle,
   HiOutlineXCircle,
 } from "react-icons/hi2";
-import { GetSalarySlip, GetSalarySlipFile } from "../../api/api_client";
+import { GetSalarySlip, GetSalarySlipFile, RetrySalarySlip } from "../../api/api_client";
 import { OverallBadge } from "./statusBadge";
 
 function readError(err, fallback) {
@@ -68,6 +69,7 @@ export default function SalarySlipDetail() {
   const [loading, setLoading] = useState(true);
   const [slip, setSlip] = useState(null);
   const [viewingFile, setViewingFile] = useState(false);
+  const [retrying, setRetrying] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -84,6 +86,24 @@ export default function SalarySlipDetail() {
   useEffect(() => {
     load();
   }, [load]);
+
+  async function handleRetry() {
+    setRetrying(true);
+    try {
+      const res = await RetrySalarySlip(id);
+      const updated = res.data?.body?.salary_slip;
+      setSlip(updated ?? null);
+      if (updated?.status === "failed") {
+        toast.error(updated.error_message || "Analysis failed again.");
+      } else {
+        toast.success("Analysis complete.");
+      }
+    } catch (err) {
+      toast.error(readError(err, "Could not retry the analysis."));
+    } finally {
+      setRetrying(false);
+    }
+  }
 
   async function handleViewFile() {
     setViewingFile(true);
@@ -161,6 +181,15 @@ export default function SalarySlipDetail() {
         <div className="max-w-2xl rounded-2xl border border-slate-200 bg-slate-50 px-6 py-6 text-slate-600">
           <p className="font-semibold text-slate-700">Analysis failed</p>
           <p className="mt-1 text-sm">{slip.error_message || "Something went wrong while analyzing this file."}</p>
+          <button
+            type="button"
+            onClick={handleRetry}
+            disabled={retrying}
+            className="mt-4 flex items-center gap-1.5 rounded-lg bg-indigo-500 px-3 py-1.5 text-sm font-semibold text-white shadow-sm shadow-indigo-500/25 transition hover:bg-indigo-600 hover:shadow-indigo-500/35 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <HiOutlineArrowPath className={`h-4 w-4 ${retrying ? "animate-spin" : ""}`} aria-hidden />
+            {retrying ? "Retrying…" : "Retry Analysis"}
+          </button>
         </div>
       )}
 
