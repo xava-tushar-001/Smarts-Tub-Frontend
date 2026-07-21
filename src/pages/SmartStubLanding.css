@@ -97,6 +97,12 @@ body {
   object-fit: contain;
 }
 
+/* Wraps ul + nav-cta. On desktop this is invisible to layout (children act
+   as direct nav flex items); on mobile it becomes the dropdown panel. */
+.nav-menu {
+  display: contents;
+}
+
 :where(.smartstub-landing) nav ul {
   display: flex;
   gap: 36px;
@@ -147,6 +153,73 @@ body {
   background: #103aac;
   transform: translateY(-1px);
   box-shadow: 0 7px 24px rgba(22, 72, 192, 0.42);
+}
+
+/* Profile icon button (nav, logged-in state) with a hover tooltip */
+.nav-icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(22, 72, 192, 0.35);
+  transition: all 0.2s;
+}
+.nav-icon-btn svg {
+  width: 20px;
+  height: 20px;
+}
+.nav-icon-btn:hover,
+.nav-icon-btn:focus-visible {
+  background: #103aac;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 24px rgba(22, 72, 192, 0.42);
+}
+.nav-icon-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translate(-50%, -4px);
+  background: var(--navy);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 7px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s, transform 0.18s;
+  z-index: 10;
+}
+.nav-icon-btn::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 2px);
+  border: 5px solid transparent;
+  border-bottom-color: var(--navy);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s;
+  z-index: 10;
+}
+.nav-icon-btn:hover::after,
+.nav-icon-btn:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.nav-icon-btn:hover::before,
+.nav-icon-btn:focus-visible::before {
+  opacity: 1;
 }
 
 .hamburger {
@@ -1552,11 +1625,66 @@ body {
   nav {
     padding: 0 20px;
   }
-  nav ul {
-    display: none;
-  }
   .hamburger {
     display: flex;
+    position: relative;
+    z-index: 310;
+  }
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    background: #fff;
+    padding: 16px 20px 20px;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 16px 32px rgba(7, 17, 43, 0.12);
+    max-height: calc(100vh - 74px);
+    overflow-y: auto;
+  }
+  nav.mobile-menu-open .nav-menu {
+    display: flex;
+  }
+  :where(.smartstub-landing) nav ul {
+    flex-direction: column;
+    gap: 2px;
+  }
+  :where(.smartstub-landing) nav ul a {
+    display: block;
+    padding: 12px 4px;
+  }
+  .nav-cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .nav-cta .btn-ghost,
+  .nav-cta .btn-filled {
+    text-align: center;
+  }
+  .nav-cta .nav-icon-btn {
+    align-self: center;
+  }
+  .nav-cta .nav-icon-btn::after,
+  .nav-cta .nav-icon-btn::before {
+    display: none;
+  }
+  /* Hamburger morphs into an X while the menu is open */
+  nav.mobile-menu-open .hamburger span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  nav.mobile-menu-open .hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+  nav.mobile-menu-open .hamburger span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
   }
   .hero-inner {
     grid-template-columns: 1fr;

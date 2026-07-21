@@ -47,9 +47,9 @@ export default function Home() {
   ].filter((d) => d.value > 0);
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-800">
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl">
           Welcome{name ? `, ${name}` : ""}
         </h1>
         <p className="mt-1 text-slate-500">Here's an overview of your payslip activity.</p>
@@ -58,7 +58,7 @@ export default function Home() {
       {loading ? (
         <p className="text-slate-500">Loading your stats…</p>
       ) : totals.total === 0 ? (
-        <div className="max-w-2xl rounded-2xl border border-slate-200 bg-white p-8 text-center">
+        <div className="max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 text-center sm:p-8">
           <p className="font-medium text-slate-700">No payslips uploaded yet.</p>
           <p className="mt-1 text-sm text-slate-500">
             Upload your first payslip to see your check breakdown and upload trends here.
@@ -67,7 +67,7 @@ export default function Home() {
       ) : (
         <>
           {/* Stat tiles */}
-          <div className="mb-6 grid gap-4 sm:grid-cols-4">
+          <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
             <div className="rounded-2xl border border-slate-200 bg-white p-5">
               <p className="text-sm text-slate-500">Total Uploads</p>
               <p className="mt-1 text-2xl font-bold text-slate-800">{totals.total}</p>

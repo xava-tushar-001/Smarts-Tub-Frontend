@@ -52,15 +52,15 @@ export default function EditProfile() {
 
   if (loading) {
     return (
-      <div className="p-6 lg:p-8">
+      <div className="p-4 sm:p-6 lg:p-8">
         <p className="text-slate-500">Loading profile…</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="mb-8">
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="mb-6 sm:mb-8">
         <button
           type="button"
           onClick={() => navigate("/profile")}
@@ -69,12 +69,12 @@ export default function EditProfile() {
           <HiOutlineArrowLeft className="h-4 w-4" aria-hidden />
           Back to Profile
         </button>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-800">Edit Profile</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl">Edit Profile</h1>
         <p className="mt-1 text-slate-500">Update your account details</p>
       </div>
 
       <div className="max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <form onSubmit={handleSave} className="space-y-5 px-6 py-6">
+        <form onSubmit={handleSave} className="space-y-5 px-4 py-5 sm:px-6 sm:py-6">
           <div>
             <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-1.5">
               Full Name

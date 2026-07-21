@@ -120,7 +120,7 @@ export default function SalarySlipDetail() {
 
   if (loading) {
     return (
-      <div className="p-6 lg:p-8">
+      <div className="p-4 sm:p-6 lg:p-8">
         <p className="text-slate-500">Loading salary slip…</p>
       </div>
     );
@@ -128,7 +128,7 @@ export default function SalarySlipDetail() {
 
   if (!slip) {
     return (
-      <div className="p-6 lg:p-8">
+      <div className="p-4 sm:p-6 lg:p-8">
         <p className="text-slate-500">Salary slip not found.</p>
       </div>
     );
@@ -142,8 +142,8 @@ export default function SalarySlipDetail() {
   };
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="mb-8">
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="mb-6 sm:mb-8">
         <button
           type="button"
           onClick={() => navigate("/salary-slips")}
@@ -152,12 +152,12 @@ export default function SalarySlipDetail() {
           <HiOutlineArrowLeft className="h-4 w-4" aria-hidden />
           Back to Salary Slips
         </button>
-        <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <h1 className="truncate text-3xl font-bold tracking-tight text-slate-800">{slip.file_name}</h1>
+            <h1 className="truncate text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl">{slip.file_name}</h1>
             <p className="mt-1 text-slate-500">Uploaded {formatDate(slip.createdAt)}</p>
           </div>
-          <div className="flex shrink-0 items-center gap-3">
+          <div className="flex shrink-0 flex-wrap items-center gap-3">
             <OverallBadge status={slip.status === "completed" ? slip.overall_status : slip.status} size="lg" />
             <button
               type="button"

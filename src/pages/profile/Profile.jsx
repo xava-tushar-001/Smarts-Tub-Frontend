@@ -42,33 +42,35 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="p-6 lg:p-8">
+      <div className="p-4 sm:p-6 lg:p-8">
         <p className="text-slate-500">Loading profile…</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-800">Profile</h1>
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl">Profile</h1>
         <p className="mt-1 text-slate-500">Manage your account details</p>
       </div>
 
       <div className="max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex items-center gap-4 border-b border-slate-100 bg-slate-50 px-6 py-6">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-xl font-semibold text-indigo-600">
-            {initialsOf(user?.name, user?.email)}
-          </div>
-          <div className="min-w-0">
-            <div className="truncate text-lg font-semibold text-slate-800">
-              {user?.name || "Add your name"}
+        <div className="flex flex-col gap-4 border-b border-slate-100 bg-slate-50 px-4 py-5 sm:flex-row sm:items-center sm:px-6 sm:py-6">
+          <div className="flex items-center gap-4">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-xl font-semibold text-indigo-600">
+              {initialsOf(user?.name, user?.email)}
             </div>
-            <div className="truncate text-sm text-slate-500">{user?.email}</div>
+            <div className="min-w-0">
+              <div className="truncate text-lg font-semibold text-slate-800">
+                {user?.name || "Add your name"}
+              </div>
+              <div className="truncate text-sm text-slate-500">{user?.email}</div>
+            </div>
           </div>
           <Link
             to="/profile/edit"
-            className="ml-auto flex shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+            className="flex shrink-0 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 sm:ml-auto sm:justify-start"
           >
             <HiOutlinePencilSquare className="h-4 w-4" aria-hidden />
             Edit Profile
@@ -76,21 +78,21 @@ export default function Profile() {
         </div>
 
         <dl className="divide-y divide-slate-100">
-          <div className="grid grid-cols-3 gap-4 px-6 py-4">
+          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-slate-500">Full Name</dt>
-            <dd className="col-span-2 text-sm text-slate-800">{user?.name || "—"}</dd>
+            <dd className="text-sm text-slate-800 sm:col-span-2">{user?.name || "—"}</dd>
           </div>
-          <div className="grid grid-cols-3 gap-4 px-6 py-4">
+          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-slate-500">Email</dt>
-            <dd className="col-span-2 text-sm text-slate-800">{user?.email || "—"}</dd>
+            <dd className="break-all text-sm text-slate-800 sm:col-span-2">{user?.email || "—"}</dd>
           </div>
-          <div className="grid grid-cols-3 gap-4 px-6 py-4">
+          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-slate-500">About</dt>
-            <dd className="col-span-2 text-sm text-slate-800">{user?.about || "—"}</dd>
+            <dd className="text-sm text-slate-800 sm:col-span-2">{user?.about || "—"}</dd>
           </div>
-          <div className="grid grid-cols-3 gap-4 px-6 py-4">
+          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-slate-500">Member Since</dt>
-            <dd className="col-span-2 text-sm text-slate-800">
+            <dd className="text-sm text-slate-800 sm:col-span-2">
               {user?.createdAt
                 ? new Date(user.createdAt).toLocaleDateString("en-IN", {
                     day: "2-digit",

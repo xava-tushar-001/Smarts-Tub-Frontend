@@ -90,8 +90,8 @@ export default function UploadSalarySlip() {
   }
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="mb-8">
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="mb-6 sm:mb-8">
         <button
           type="button"
           onClick={() => navigate("/salary-slips")}
@@ -100,7 +100,7 @@ export default function UploadSalarySlip() {
           <HiOutlineArrowLeft className="h-4 w-4" aria-hidden />
           Back to Salary Slips
         </button>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-800">Upload Salary Slip</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl">Upload Salary Slip</h1>
         <p className="mt-1 text-slate-500">AI will analyze it for errors, warnings, and missing information.</p>
       </div>
 
@@ -127,7 +127,7 @@ export default function UploadSalarySlip() {
           </Link>
         </div>
       ) : (
-      <div className="max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
         <div
           onDragOver={(e) => {
             e.preventDefault();
@@ -136,11 +136,13 @@ export default function UploadSalarySlip() {
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
-          className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed px-6 py-12 text-center transition ${
+          className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed px-4 py-10 text-center transition sm:px-6 sm:py-12 ${
             dragOver ? "border-indigo-400 bg-indigo-50" : "border-slate-200 hover:border-slate-300"
           }`}
         >
-          <HiOutlineDocumentArrowUp className="h-10 w-10 text-slate-400" aria-hidden />
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-indigo-50">
+            <HiOutlineDocumentArrowUp className="h-7 w-7 text-indigo-500" aria-hidden />
+          </div>
           <div>
             <p className="font-medium text-slate-700">Click to browse or drag a file here</p>
             <p className="mt-1 text-sm text-slate-400">PDF, JPG, PNG, or WEBP · up to 10MB</p>

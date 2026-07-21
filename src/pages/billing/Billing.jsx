@@ -97,7 +97,7 @@ export default function Billing() {
 
   if (loading) {
     return (
-      <div className="p-6 lg:p-8">
+      <div className="p-4 sm:p-6 lg:p-8">
         <p className="text-slate-500">Loading billing status…</p>
       </div>
     );
@@ -109,9 +109,9 @@ export default function Billing() {
   const usagePct = Math.min(100, Math.round((usageCount / usageLimit) * 100));
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-800">Billing</h1>
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl">Billing</h1>
         <p className="mt-1 text-slate-500">Manage your plan and payslip upload usage</p>
       </div>
 

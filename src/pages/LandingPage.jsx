@@ -4,11 +4,13 @@ import logo from '../assets/logo.webp';
 import { CreateUser } from '../api/api_client';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { HiOutlineUserCircle } from 'react-icons/hi2';
 
 const SmartStubLanding = () => {
   const [scrolled, setScrolled] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [email, setEmail] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Nav scroll shadow
   useEffect(() => {
@@ -59,47 +61,55 @@ const SmartStubLanding = () => {
   return (
     <div className="smartstub-landing">
       {/* ── NAV ── */}
-      <nav id="mainNav" className={scrolled ? 'scrolled' : ''}>
+      <nav id="mainNav" className={`${scrolled ? 'scrolled' : ''} ${mobileMenuOpen ? 'mobile-menu-open' : ''}`}>
         <a href="#" className="nav-logo">
           <img
             src={logo}
             alt="SmartStub"
           />
         </a>
-        <ul>
-          <li>
-            <a href="#features">Features</a>
-          </li>
-          <li>
-            <a href="#how">How It Works</a>
-          </li>
-          <li>
-            <a href="#dashboard">Dashboard</a>
-          </li>
-          <li>
-            <a href="#tax">Tax Compare</a>
-          </li>
-          <li>
-            <a href="#mobile">Mobile App</a>
-          </li>
-        </ul>
-        <div className="nav-cta">
-          {isLoggedIn ? (
-            <Link to="/home" className="btn-filled">
-              Profile
-            </Link>
-          ) : (
-            <>
-              <Link to="/login" className="btn-ghost">
-                Login
+        <div className="nav-menu" onClick={() => setMobileMenuOpen(false)}>
+          <ul>
+            <li>
+              <a href="#features">Features</a>
+            </li>
+            <li>
+              <a href="#how">How It Works</a>
+            </li>
+            <li>
+              <a href="#dashboard">Dashboard</a>
+            </li>
+            <li>
+              <a href="#tax">Tax Compare</a>
+            </li>
+            <li>
+              <a href="#mobile">Mobile App</a>
+            </li>
+          </ul>
+          <div className="nav-cta">
+            {isLoggedIn ? (
+              <Link to="/home" className="nav-icon-btn" data-tooltip="Profile" aria-label="Profile">
+                <HiOutlineUserCircle />
               </Link>
-              <Link to="/register" className="btn-filled">
-                Sign Up
-              </Link>
-            </>
-          )}
+            ) : (
+              <>
+                <Link to="/login" className="btn-ghost">
+                  Login
+                </Link>
+                <Link to="/register" className="btn-filled">
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
         </div>
-        <button className="hamburger" aria-label="Menu">
+        <button
+          type="button"
+          className="hamburger"
+          aria-label="Menu"
+          aria-expanded={mobileMenuOpen}
+          onClick={() => setMobileMenuOpen((v) => !v)}
+        >
           <span></span>
           <span></span>
           <span></span>
