@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { GetUsers } from "../../api/api_client";
 
@@ -71,19 +72,21 @@ export default function Users() {
                 <th className="whitespace-nowrap px-4 py-3 font-semibold text-black">Name</th>
                 <th className="whitespace-nowrap px-4 py-3 font-semibold text-black">Email</th>
                 <th className="whitespace-nowrap px-4 py-3 font-semibold text-black">Status</th>
+                <th className="whitespace-nowrap px-4 py-3 font-semibold text-black">Plan</th>
                 <th className="whitespace-nowrap px-4 py-3 font-semibold text-black">Created At</th>
+                <th className="whitespace-nowrap px-4 py-3 font-semibold text-black"></th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={4} className="px-4 py-12 text-center text-black/50">
+                  <td colSpan={6} className="px-4 py-12 text-center text-black/50">
                     Loading users…
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-4 py-12 text-center text-black/50">
+                  <td colSpan={6} className="px-4 py-12 text-center text-black/50">
                     No users found
                   </td>
                 </tr>
@@ -108,6 +111,17 @@ export default function Users() {
                         </span>
                       )}
                     </td>
+                    <td className="px-4 py-3">
+                      {row.plan === "paid" ? (
+                        <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-700">
+                          Paid
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+                          Free
+                        </span>
+                      )}
+                    </td>
                     <td className="px-4 py-3 text-black/70">
                       {row.createdAt
                         ? new Date(row.createdAt).toLocaleString("en-IN", {
@@ -119,6 +133,14 @@ export default function Users() {
                             hour12: true,
                           })
                         : "—"}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <Link
+                        to={`/users/${row.id}`}
+                        className="rounded-lg border border-black/15 px-3 py-1.5 text-sm font-medium text-black transition hover:bg-black/[0.04]"
+                      >
+                        View
+                      </Link>
                     </td>
                   </tr>
                 ))
