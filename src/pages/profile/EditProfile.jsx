@@ -85,7 +85,7 @@ export default function EditProfile() {
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="Your name"
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#8aa25a] focus:ring-2 focus:ring-[#e4ecc9]"
             />
           </div>
 
@@ -99,7 +99,7 @@ export default function EditProfile() {
               value={form.about}
               onChange={(e) => setForm((f) => ({ ...f, about: e.target.value }))}
               placeholder="A short bio"
-              className="w-full resize-none rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+              className="w-full resize-none rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#8aa25a] focus:ring-2 focus:ring-[#e4ecc9]"
             />
           </div>
 
@@ -107,7 +107,7 @@ export default function EditProfile() {
             <button
               type="submit"
               disabled={saving}
-              className="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-indigo-500/25 transition hover:bg-indigo-600 hover:shadow-indigo-500/35 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-lg bg-[#17352a] px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-[#17352a]/20 transition hover:bg-[#0f2820] hover:shadow-[#17352a]/30 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {saving ? "Saving…" : "Save Changes"}
             </button>

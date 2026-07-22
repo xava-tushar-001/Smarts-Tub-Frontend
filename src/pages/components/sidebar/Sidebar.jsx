@@ -1,22 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate, Link } from "react-router-dom";
 import {
   HiOutlineArrowRightOnRectangle,
-  HiOutlineChevronLeft,
-  HiOutlineChevronRight,
+  HiOutlineCog6Tooth,
+  HiOutlineSparkles,
   HiOutlineXMark,
 } from "react-icons/hi2";
 import { sidebarMenu } from "./sidebarMenu";
-import MianLogo from "../../../assets/logo.webp";
+import { GetBillingStatus } from "../../../api/api_client";
+import MainLogo from "../../../assets/mainicon.png"
 
 const linkClass =
-  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 transition-all duration-200 hover:bg-slate-50 hover:text-slate-700";
+  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 transition-all duration-200 hover:bg-[#eef2df] hover:text-[#17352a]";
 
-const activeClass = "bg-indigo-50 text-indigo-600 hover:bg-indigo-100 hover:text-indigo-700";
+const activeClass = "bg-[#eef2df] text-[#17352a] hover:bg-[#e4ead0] hover:text-[#17352a]";
 
 export default function Sidebar({ mobileOpen = false, onCloseMobile = () => { } }) {
-  const [open, setOpen] = useState(true);
   const navigate = useNavigate();
+  const [isPaid, setIsPaid] = useState(true);
+
+  useEffect(() => {
+    GetBillingStatus()
+      .then((res) => setIsPaid((res.data?.body?.plan ?? "paid") === "paid"))
+      .catch(() => { });
+  }, []);
 
   function handleLogout() {
     localStorage.clear();
@@ -38,40 +45,20 @@ export default function Sidebar({ mobileOpen = false, onCloseMobile = () => { } 
       />
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-72 shrink-0 flex-col overflow-hidden bg-white shadow-xl shadow-slate-300/40 transition-transform duration-300 ease-in-out md:relative md:z-auto md:translate-x-0 md:shadow-lg md:shadow-slate-200/50 md:transition-[width] ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
-        } ${open ? "md:w-64" : "md:w-[4.75rem]"}`}
+        className={`fixed inset-y-0 left-0 z-50 flex w-72 shrink-0 flex-col overflow-hidden bg-white shadow-xl shadow-slate-300/40 transition-transform duration-300 ease-in-out md:relative md:z-auto md:w-64 md:translate-x-0 md:shadow-none md:border-r md:border-slate-100 ${mobileOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
-        <div
-          className={`flex min-h-[4.5rem] shrink-0 items-center border-b border-slate-100 px-3 py-4 ${open ? "justify-between gap-2" : "justify-center"
-            }`}
-        >
-          {open && (
-            <Link to="/" className="flex min-w-0 items-center gap-2 truncate pl-1">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center">
-                <img src={MianLogo} alt="logo" className="h-5 w-auto" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-base font-bold tracking-tight text-slate-800">SmartStub</span>
-                <span className="text-[10px] font-mono text-slate-400">Users Panel</span>
-              </div>
-            </Link>
-          )}
-
-          {/* Desktop collapse toggle */}
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
-            className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-600 md:flex"
-          >
-            {open ? (
-              <HiOutlineChevronLeft className="h-4 w-4" aria-hidden />
-            ) : (
-              <HiOutlineChevronRight className="h-4 w-4" aria-hidden />
-            )}
-          </button>
+        <div className="flex min-h-[4.5rem] shrink-0 items-center justify-between gap-2 px-5 py-4">
+          <Link to="/" className="flex min-w-0 items-center gap-2.5">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white">
+              <img
+                src={MainLogo}
+                alt="Logo"
+                className="object-contain"
+              />
+            </div>
+            <span className="truncate text-lg font-bold tracking-tight text-slate-900">SmartStub</span>
+          </Link>
 
           {/* Mobile close button */}
           <button
@@ -84,7 +71,7 @@ export default function Sidebar({ mobileOpen = false, onCloseMobile = () => { } 
           </button>
         </div>
 
-        <nav className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-3">
+        <nav className="flex min-h-0 flex-col gap-1 overflow-y-auto px-3">
           {sidebarMenu.map((item) => {
             const Icon = item.icon;
             return (
@@ -92,29 +79,51 @@ export default function Sidebar({ mobileOpen = false, onCloseMobile = () => { } 
                 key={item.link}
                 to={item.link}
                 end={item.end === true}
-                title={!open ? item.title : undefined}
                 onClick={handleNavClick}
-                className={({ isActive }) =>
-                  `${linkClass} ${!open ? "justify-center px-2" : ""} ${isActive ? activeClass : ""}`
-                }
+                className={({ isActive }) => `${linkClass} ${isActive ? activeClass : ""}`}
               >
                 <Icon className="h-5 w-5 shrink-0" />
-                {open && <span className="truncate">{item.title}</span>}
+                <span className="truncate">{item.title}</span>
               </NavLink>
             );
           })}
         </nav>
 
-        <div className="shrink-0 border-t border-slate-100 p-3">
+        <div className="min-h-0 flex-1" />
+
+        {!isPaid && (
+          <div className="mx-3 mb-4 rounded-2xl bg-[#17352a] p-4 text-white">
+            <HiOutlineSparkles className="h-5 w-5 text-[#d6e17e]" aria-hidden />
+            <p className="mt-2 text-xs font-bold uppercase tracking-wide text-[#d6e17e]">SmartStub Pro</p>
+            <p className="mt-1 text-sm leading-snug text-white/75">
+              Unlock more monthly uploads and full payslip history.
+            </p>
+            <Link
+              to="/billing"
+              onClick={handleNavClick}
+              className="mt-3 block rounded-lg bg-[#d6e17e] px-3 py-2 text-center text-sm font-semibold text-[#17352a] transition hover:bg-[#cbd66c]"
+            >
+              Manage plan
+            </Link>
+          </div>
+        )}
+
+        <div className="shrink-0 space-y-1 border-t border-slate-100 p-3">
+          <NavLink
+            to="/profile"
+            onClick={handleNavClick}
+            className={({ isActive }) => `${linkClass} ${isActive ? activeClass : ""}`}
+          >
+            <HiOutlineCog6Tooth className="h-5 w-5 shrink-0" aria-hidden />
+            <span className="truncate">Settings</span>
+          </NavLink>
           <button
             type="button"
             onClick={handleLogout}
-            title={!open ? "Log out" : undefined}
-            className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 ${!open ? "justify-center px-2" : ""
-              }`}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 transition-all duration-200 hover:bg-red-50 hover:text-red-600"
           >
             <HiOutlineArrowRightOnRectangle className="h-5 w-5 shrink-0" aria-hidden />
-            {open && <span className="truncate">Log out</span>}
+            <span className="truncate">Sign out</span>
           </button>
         </div>
       </aside>

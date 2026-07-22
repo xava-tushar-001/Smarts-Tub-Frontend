@@ -40,7 +40,7 @@ function EmptyState() {
     <div className="flex flex-col items-center gap-2 px-4 py-16 text-center text-slate-400">
       <HiOutlineDocumentMagnifyingGlass className="h-8 w-8 text-slate-300" aria-hidden />
       <p>No salary slips uploaded yet.</p>
-      <Link to="/salary-slips/upload" className="font-medium text-indigo-500 hover:text-indigo-600">
+      <Link to="/salary-slips/upload" className="font-medium text-[#17352a] hover:text-[#0f2820]">
         Upload your first one
       </Link>
     </div>
@@ -90,7 +90,7 @@ export default function SalarySlips() {
         </div>
         <Link
           to="/salary-slips/upload"
-          className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-indigo-500/25 transition hover:bg-indigo-600 hover:shadow-indigo-500/35 sm:justify-start"
+          className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#17352a] px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-[#17352a]/20 transition hover:bg-[#0f2820] hover:shadow-[#17352a]/30 sm:justify-start"
         >
           <HiOutlineArrowUpTray className="h-4 w-4" aria-hidden />
           Upload Salary Slip
@@ -111,7 +111,7 @@ export default function SalarySlips() {
               <Link
                 key={row.id}
                 to={`/salary-slips/${row.id}`}
-                className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-indigo-200 hover:shadow-md"
+                className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-[#d7dfc0] hover:shadow-md"
               >
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium text-slate-800">{row.file_name}</p>

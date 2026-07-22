@@ -173,7 +173,7 @@ export default function SalarySlipDetail() {
       </div>
 
       {slip.status === "processing" && (
-        <div className="max-w-2xl rounded-2xl border border-indigo-200 bg-indigo-50 px-6 py-6 text-indigo-700">
+        <div className="max-w-2xl rounded-2xl border border-[#d7dfc0] bg-[#eef2df] px-6 py-6 text-[#0f2820]">
           Analysis is still in progress. Check back shortly.
         </div>
       )}
@@ -186,7 +186,7 @@ export default function SalarySlipDetail() {
             type="button"
             onClick={handleRetry}
             disabled={retrying}
-            className="mt-4 flex items-center gap-1.5 rounded-lg bg-indigo-500 px-3 py-1.5 text-sm font-semibold text-white shadow-sm shadow-indigo-500/25 transition hover:bg-indigo-600 hover:shadow-indigo-500/35 disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-4 flex items-center gap-1.5 rounded-lg bg-[#17352a] px-3 py-1.5 text-sm font-semibold text-white shadow-sm shadow-[#17352a]/20 transition hover:bg-[#0f2820] hover:shadow-[#17352a]/30 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <HiOutlineArrowPath className={`h-4 w-4 ${retrying ? "animate-spin" : ""}`} aria-hidden />
             {retrying ? "Retrying…" : "Retry Analysis"}

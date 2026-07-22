@@ -135,8 +135,8 @@ export default function UploadSalarySlip() {
       )}
 
       {limitReached ? (
-        <div className="max-w-5xl rounded-2xl border border-indigo-200 bg-indigo-50 p-8 text-center">
-          <HiOutlineLockClosed className="mx-auto h-8 w-8 text-indigo-500" aria-hidden />
+        <div className="max-w-5xl rounded-2xl border border-[#d7dfc0] bg-[#eef2df] p-8 text-center">
+          <HiOutlineLockClosed className="mx-auto h-8 w-8 text-[#17352a]" aria-hidden />
           <p className="mt-3 font-semibold text-slate-800">
             You've used all {usage.limit} payslip uploads this month
           </p>
@@ -145,7 +145,7 @@ export default function UploadSalarySlip() {
           </p>
           <Link
             to="/billing"
-            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-indigo-500/25 transition hover:bg-indigo-600 hover:shadow-indigo-500/35"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#17352a] px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-[#17352a]/20 transition hover:bg-[#0f2820] hover:shadow-[#17352a]/30"
           >
             Upgrade to Pro
           </Link>
@@ -162,10 +162,10 @@ export default function UploadSalarySlip() {
           onClick={() => !checkingFile && inputRef.current?.click()}
           className={`flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed px-4 py-10 text-center transition sm:px-6 sm:py-12 ${
             checkingFile ? "cursor-wait opacity-70" : "cursor-pointer"
-          } ${dragOver ? "border-indigo-400 bg-indigo-50" : "border-slate-200 hover:border-slate-300"}`}
+          } ${dragOver ? "border-[#8aa25a] bg-[#eef2df]" : "border-slate-200 hover:border-slate-300"}`}
         >
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-indigo-50">
-            <HiOutlineDocumentArrowUp className="h-7 w-7 text-indigo-500" aria-hidden />
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#eef2df]">
+            <HiOutlineDocumentArrowUp className="h-7 w-7 text-[#17352a]" aria-hidden />
           </div>
           <div>
             <p className="font-medium text-slate-700">
@@ -205,7 +205,7 @@ export default function UploadSalarySlip() {
           type="button"
           onClick={handleAnalyze}
           disabled={!file || uploading}
-          className="mt-6 w-full rounded-lg bg-indigo-500 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-indigo-500/25 transition hover:bg-indigo-600 hover:shadow-indigo-500/35 disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-6 w-full rounded-lg bg-[#17352a] px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-[#17352a]/20 transition hover:bg-[#0f2820] hover:shadow-[#17352a]/30 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {uploading ? "Analyzing your salary slip…" : "Analyze Salary Slip"}
         </button>

@@ -58,7 +58,7 @@ export default function Profile() {
       <div className="max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="flex flex-col gap-4 border-b border-slate-100 bg-slate-50 px-4 py-5 sm:flex-row sm:items-center sm:px-6 sm:py-6">
           <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-xl font-semibold text-indigo-600">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#eef2df] text-xl font-semibold text-[#17352a]">
               {initialsOf(user?.name, user?.email)}
             </div>
             <div className="min-w-0">
