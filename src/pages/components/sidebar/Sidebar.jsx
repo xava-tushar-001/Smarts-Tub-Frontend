@@ -3,6 +3,7 @@ import { NavLink, useNavigate, Link } from "react-router-dom";
 import {
   HiOutlineArrowRightOnRectangle,
   HiOutlineCog6Tooth,
+  HiOutlineLink,
   HiOutlineSparkles,
   HiOutlineXMark,
 } from "react-icons/hi2";
@@ -87,6 +88,16 @@ export default function Sidebar({ mobileOpen = false, onCloseMobile = () => { } 
               </NavLink>
             );
           })}
+          {isPaid && (
+            <NavLink
+              to="/payroll"
+              onClick={handleNavClick}
+              className={({ isActive }) => `${linkClass} ${isActive ? activeClass : ""}`}
+            >
+              <HiOutlineLink className="h-5 w-5 shrink-0" />
+              <span className="truncate">Payroll</span>
+            </NavLink>
+          )}
         </nav>
 
         <div className="min-h-0 flex-1" />
