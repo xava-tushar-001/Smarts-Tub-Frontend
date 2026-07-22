@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { PDFDocument } from "pdf-lib";
 import { HiOutlineArrowLeft, HiOutlineDocumentArrowUp, HiOutlineXMark, HiOutlineLockClosed } from "react-icons/hi2";
 import { UploadSalarySlip as uploadSalarySlipRequest, GetBillingStatus } from "../../api/api_client";
 
 const ACCEPTED_TYPES = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_PDF_PAGES = 4;
 
 function readError(err, fallback) {
   const msg =
@@ -29,6 +31,7 @@ export default function UploadSalarySlip() {
   const [file, setFile] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [checkingFile, setCheckingFile] = useState(false);
   const [usage, setUsage] = useState(null);
   const [loadingUsage, setLoadingUsage] = useState(true);
 
@@ -41,7 +44,7 @@ export default function UploadSalarySlip() {
 
   const limitReached = usage && usage.count >= usage.limit;
 
-  function validateAndSetFile(candidate) {
+  async function validateAndSetFile(candidate) {
     if (!candidate) return;
     if (!ACCEPTED_TYPES.includes(candidate.type)) {
       toast.error("Unsupported file type. Please upload a PDF, JPG, PNG, or WEBP file.");
@@ -51,6 +54,27 @@ export default function UploadSalarySlip() {
       toast.error("File is too large. Maximum size is 10MB.");
       return;
     }
+
+    if (candidate.type === "application/pdf") {
+      setCheckingFile(true);
+      try {
+        const bytes = await candidate.arrayBuffer();
+        const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+        const pageCount = doc.getPageCount();
+        if (pageCount > MAX_PDF_PAGES) {
+          toast.error(
+            `This PDF has ${pageCount} pages. Please upload a salary slip with at most ${MAX_PDF_PAGES} pages.`
+          );
+          return;
+        }
+      } catch {
+        toast.error("Could not read this PDF. Please make sure it's a valid, unencrypted PDF file.");
+        return;
+      } finally {
+        setCheckingFile(false);
+      }
+    }
+
     setFile(candidate);
   }
 
@@ -131,26 +155,29 @@ export default function UploadSalarySlip() {
         <div
           onDragOver={(e) => {
             e.preventDefault();
-            setDragOver(true);
+            if (!checkingFile) setDragOver(true);
           }}
           onDragLeave={() => setDragOver(false)}
-          onDrop={handleDrop}
-          onClick={() => inputRef.current?.click()}
-          className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed px-4 py-10 text-center transition sm:px-6 sm:py-12 ${
-            dragOver ? "border-indigo-400 bg-indigo-50" : "border-slate-200 hover:border-slate-300"
-          }`}
+          onDrop={checkingFile ? undefined : handleDrop}
+          onClick={() => !checkingFile && inputRef.current?.click()}
+          className={`flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed px-4 py-10 text-center transition sm:px-6 sm:py-12 ${
+            checkingFile ? "cursor-wait opacity-70" : "cursor-pointer"
+          } ${dragOver ? "border-indigo-400 bg-indigo-50" : "border-slate-200 hover:border-slate-300"}`}
         >
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-indigo-50">
             <HiOutlineDocumentArrowUp className="h-7 w-7 text-indigo-500" aria-hidden />
           </div>
           <div>
-            <p className="font-medium text-slate-700">Click to browse or drag a file here</p>
-            <p className="mt-1 text-sm text-slate-400">PDF, JPG, PNG, or WEBP · up to 10MB</p>
+            <p className="font-medium text-slate-700">
+              {checkingFile ? "Checking file…" : "Click to browse or drag a file here"}
+            </p>
+            <p className="mt-1 text-sm text-slate-400">PDF (up to {MAX_PDF_PAGES} pages), JPG, PNG, or WEBP · up to 10MB</p>
           </div>
           <input
             ref={inputRef}
             type="file"
             accept=".pdf,image/jpeg,image/png,image/webp"
+            disabled={checkingFile}
             className="hidden"
             onChange={(e) => validateAndSetFile(e.target.files?.[0])}
           />
