@@ -92,3 +92,11 @@ export const ConnectPayroll = async (code) => {
 export const DisconnectPayroll = async () => {
     return await instance.post('/users/payroll/disconnect')
 }
+
+export const SyncPayroll = async () => {
+    return await instance.post('/users/payroll/sync')
+}
+
+export const GetPayrollHistory = async (params) => {
+    return await instance.get('/users/payroll/history', { params })
+}
