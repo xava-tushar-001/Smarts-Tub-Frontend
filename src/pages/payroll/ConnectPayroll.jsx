@@ -9,10 +9,13 @@ import {
   HiOutlineLinkSlash,
   HiOutlineLockClosed,
 } from "react-icons/hi2";
-import { GetBillingStatus, GetPayrollStatus, ConnectPayroll as connectPayrollRequest, DisconnectPayroll } from "../../api/api_client";
-
-const FINCH_CLIENT_ID = import.meta.env.VITE_FINCH_CLIENT_ID;
-const FINCH_PRODUCTS = ["company", "directory", "individual", "employment", "payment"];
+import {
+  GetBillingStatus,
+  GetPayrollStatus,
+  CreatePayrollSession,
+  ConnectPayroll as connectPayrollRequest,
+  DisconnectPayroll,
+} from "../../api/api_client";
 
 function readError(err, fallback) {
   const msg =
@@ -56,7 +59,7 @@ export default function ConnectPayroll() {
     load();
   }, [load]);
 
-  const { openPreview } = useFinchConnect({
+  const { open } = useFinchConnect({
     onSuccess: async ({ code }) => {
       try {
         const res = await connectPayrollRequest(code);
@@ -77,14 +80,23 @@ export default function ConnectPayroll() {
     },
   });
 
-  function handleConnectClick() {
-    if (!FINCH_CLIENT_ID) {
-      toast.error("Payroll integration is not configured yet.");
-      return;
-    }
-    // Give immediate feedback - the Finch popup itself can take a moment to appear.
+  async function handleConnectClick() {
+    // Give immediate feedback - session creation + the Finch popup can take a moment.
     setConnecting(true);
-    openPreview({ clientId: FINCH_CLIENT_ID, products: FINCH_PRODUCTS });
+    try {
+      const res = await CreatePayrollSession();
+      const sessionId = res.data?.body?.session_id;
+      if (!sessionId) {
+        toast.error("Could not start the payroll connection.");
+        setConnecting(false);
+        return;
+      }
+      open({ sessionId });
+      // setConnecting(false) happens in onSuccess/onError/onClose once the popup resolves.
+    } catch (err) {
+      toast.error(readError(err, "Could not start the payroll connection."));
+      setConnecting(false);
+    }
   }
 
   async function handleDisconnect() {
@@ -130,7 +142,7 @@ export default function ConnectPayroll() {
           </Link>
         </div>
       ) : connection?.status === "active" ? (
-        <div className="max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="max-w-5xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#e9f2e0] text-[#3f7d3a]">
               <HiOutlineBuildingOffice2 className="h-6 w-6" aria-hidden />

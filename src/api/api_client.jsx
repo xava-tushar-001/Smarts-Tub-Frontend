@@ -77,6 +77,10 @@ export const CreatePortalSession = async () => {
 }
 
 // Payroll integration (Finch, Pro-only)
+export const CreatePayrollSession = async () => {
+    return await instance.post('/users/payroll/session')
+}
+
 export const GetPayrollStatus = async () => {
     return await instance.get('/users/payroll/status')
 }
