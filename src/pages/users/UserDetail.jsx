@@ -121,7 +121,7 @@ export default function UserDetail() {
       </div>
 
       {/* Links to detail pages */}
-      <div className="grid max-w-4xl gap-4 sm:grid-cols-2">
+      <div className="grid max-w-5xl gap-4 sm:grid-cols-2">
         <Link
           to={`/users/${id}/payments`}
           className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-200 hover:shadow-md"
