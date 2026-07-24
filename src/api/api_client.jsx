@@ -26,6 +26,15 @@ export const GoogleLogin = async (data) => {
     return await instance.post('/users/google-login', data)
 }
 
+// Password reset (email + OTP -> new password)
+export const ForgotPassword = async (data) => {
+    return await instance.post('/users/forgot-password', data)
+}
+
+export const ResetPassword = async (data) => {
+    return await instance.post('/users/reset-password', data)
+}
+
 // Profile
 export const GetProfile = async () => {
     return await instance.get('/users/profile')

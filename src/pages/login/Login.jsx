@@ -203,9 +203,9 @@ relative overflow-hidden">
                 <label htmlFor="password" className="block text-sm font-semibold text-slate-700">
                   Password
                 </label>
-                <a href="#" className="text-sm text-indigo-500 hover:text-indigo-600 transition-colors font-medium">
+                <Link to="/forgot-password" className="text-sm text-indigo-500 hover:text-indigo-600 transition-colors font-medium">
                   Forgot Password?
-                </a>
+                </Link>
               </div>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

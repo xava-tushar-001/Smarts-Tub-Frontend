@@ -5,6 +5,7 @@ import WildcardRedirect from "./WildcardRedirect";
 import MainLayout from "./Layout";
 import Login from "../pages/login/Login";
 import Register from "../pages/register/Register";
+import ForgotPassword from "../pages/forgotPassword/ForgotPassword";
 import Home from "../pages/Home";
 import Profile from "../pages/profile/Profile";
 import EditProfile from "../pages/profile/EditProfile";
@@ -25,7 +26,8 @@ export const router = createBrowserRouter([
     element: <Public />,
     children: [
       { path: "/login", element: <Login /> },
-      { path: "/register", element: <Register /> }
+      { path: "/register", element: <Register /> },
+      { path: "/forgot-password", element: <ForgotPassword /> }
     ],
   },
   {
