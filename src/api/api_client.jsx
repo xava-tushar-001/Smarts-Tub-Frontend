@@ -5,6 +5,10 @@ export const LoginUser = async (data) => {
     return await instance.post('/admin/login', data)
 }
 
+export const GetDashboardStats = async () => {
+    return await instance.get('/admin/dashboard-stats')
+}
+
 export const GetSubscriber = async (data) => {
     return await instance.get('/admin/subscriber-list', { params: data })
 }
