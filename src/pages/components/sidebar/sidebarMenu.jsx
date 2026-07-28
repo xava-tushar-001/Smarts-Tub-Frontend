@@ -1,4 +1,10 @@
-import { HiOutlineSquares2X2, HiOutlineDocumentMagnifyingGlass, HiOutlineCreditCard } from "react-icons/hi2";
+import {
+  HiOutlineSquares2X2,
+  HiOutlineDocumentMagnifyingGlass,
+  HiOutlineCreditCard,
+  HiOutlineChartBar,
+  HiOutlineLink,
+} from "react-icons/hi2";
 
 /**
  * Sidebar navigation items: title, link, icon, optional end (exact path match for NavLink)
@@ -16,6 +22,18 @@ export const sidebarMenu = [
     icon: HiOutlineDocumentMagnifyingGlass,
     end: false,
   },
+  {
+    title: "Earnings",
+    link: "/earnings",
+    icon: HiOutlineChartBar,
+    end: true,
+  },
+  // {
+  //   title: "Connect Payroll",
+  //   link: "/payroll",
+  //   icon: HiOutlineLink,
+  //   end: true,
+  // },
   {
     title: "Billing",
     link: "/billing",

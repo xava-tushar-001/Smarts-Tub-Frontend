@@ -14,6 +14,8 @@ import UploadSalarySlip from "../pages/salarySlips/UploadSalarySlip";
 import SalarySlipDetail from "../pages/salarySlips/SalarySlipDetail";
 import Billing from "../pages/billing/Billing";
 import ConnectPayroll from "../pages/payroll/ConnectPayroll";
+import EarningsDashboard from "../pages/payroll/EarningsDashboard";
+import PlanSelection from "../pages/onboarding/PlanSelection";
 import LandingPage from "../pages/LandingPage";
 
 export const router = createBrowserRouter([
@@ -33,6 +35,7 @@ export const router = createBrowserRouter([
   {
     element: <Protected />,
     children: [
+      { path: "/select-plan", element: <PlanSelection /> },
       {
         element: <MainLayout />,
         children: [
@@ -44,6 +47,7 @@ export const router = createBrowserRouter([
           { path: "/salary-slips/:id", element: <SalarySlipDetail /> },
           { path: "/billing", element: <Billing /> },
           { path: "/payroll", element: <ConnectPayroll /> },
+          { path: "/earnings", element: <EarningsDashboard /> },
         ],
       },
     ],

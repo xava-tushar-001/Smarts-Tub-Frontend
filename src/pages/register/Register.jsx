@@ -76,7 +76,7 @@ export default function Register() {
       toast.success("Account created successfully.");
       if (token) {
         localStorage.setItem("token", token);
-        navigate("/home", { replace: true });
+        navigate(res.data?.body?.plan_selected ? "/home" : "/select-plan", { replace: true });
       } else {
         navigate("/login", { replace: true });
       }

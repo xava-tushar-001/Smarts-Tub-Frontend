@@ -28,7 +28,7 @@ export default function Login() {
       }
       localStorage.setItem("token", token);
       toast.success("Signed in successfully.");
-      navigate("/home", { replace: true });
+      navigate(res.data?.body?.plan_selected ? "/home" : "/select-plan", { replace: true });
     } catch (err) {
       const msg =
         err.response?.data?.message ??

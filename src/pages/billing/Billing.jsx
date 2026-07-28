@@ -199,7 +199,7 @@ export default function Billing() {
                 </li>
                 <li className="flex items-center gap-2">
                   <HiOutlineCheckCircle className="h-4 w-4 shrink-0 text-[#17352a]" aria-hidden />
-                  Automatic payroll sync (coming soon)
+                  Payroll sync via Finch
                 </li>
                 <li className="flex items-center gap-2">
                   <HiOutlineCheckCircle className="h-4 w-4 shrink-0 text-[#17352a]" aria-hidden />

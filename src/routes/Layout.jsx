@@ -33,9 +33,15 @@ export default function MainLayout() {
 
   useEffect(() => {
     GetProfile()
-      .then((res) => setUser(res.data?.body?.user ?? null))
+      .then((res) => {
+        const fetchedUser = res.data?.body?.user ?? null;
+        setUser(fetchedUser);
+        if (fetchedUser && !fetchedUser.plan_selected) {
+          navigate("/select-plan", { replace: true });
+        }
+      })
       .catch(() => {});
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (!menuOpen) return;

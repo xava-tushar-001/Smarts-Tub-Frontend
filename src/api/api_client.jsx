@@ -44,6 +44,11 @@ export const UpdateProfile = async (data) => {
     return await instance.put('/users/profile', data)
 }
 
+// Plan Selection (post-verification onboarding step)
+export const SelectPlan = async (data) => {
+    return await instance.post('/users/select-plan', data)
+}
+
 // Salary slip analysis
 export const UploadSalarySlip = async (file) => {
     const formData = new FormData();
