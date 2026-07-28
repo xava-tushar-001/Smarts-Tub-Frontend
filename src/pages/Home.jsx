@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { GetDashboardStats } from "../api/api_client";
 import {
   Bar,
@@ -18,6 +19,7 @@ import {
   HiOutlineSparkles,
   HiOutlineDocumentMagnifyingGlass,
   HiOutlineLink,
+  HiOutlineExclamationTriangle,
 } from "react-icons/hi2";
 
 const PLAN_COLORS = { free: "#94a3b8", paid: "#6366f1" };
@@ -48,6 +50,7 @@ export default function Home() {
     paid_users: 0,
     salary_slips: 0,
     payroll_connected: 0,
+    payroll_reauth_required: 0,
   };
   const monthlySignups = stats?.monthly_signups ?? [];
   const monthlyUploads = stats?.monthly_uploads ?? [];
@@ -111,7 +114,10 @@ export default function Home() {
                 </div>
                 <p className="mt-3 text-2xl font-bold text-slate-800">{totals.salary_slips}</p>
               </div>
-              {/* <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <Link
+                to="/payroll"
+                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-200 hover:shadow-md"
+              >
                 <div className="flex items-center justify-between">
                   <p className="text-sm text-slate-500">Payroll Connected</p>
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
@@ -119,7 +125,21 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="mt-3 text-2xl font-bold text-slate-800">{totals.payroll_connected}</p>
-              </div> */}
+              </Link>
+              {totals.payroll_reauth_required > 0 && (
+                <Link
+                  to="/payroll?status=reauth"
+                  className="rounded-2xl border border-rose-200 bg-rose-50 p-5 shadow-sm transition hover:border-rose-300 hover:shadow-md"
+                >
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-rose-600">Needs Reconnect</p>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-100 text-rose-600">
+                      <HiOutlineExclamationTriangle className="h-5 w-5" aria-hidden />
+                    </div>
+                  </div>
+                  <p className="mt-3 text-2xl font-bold text-rose-700">{totals.payroll_reauth_required}</p>
+                </Link>
+              )}
             </div>
 
             {/* Charts */}

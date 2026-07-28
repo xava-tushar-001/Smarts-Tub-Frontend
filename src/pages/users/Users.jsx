@@ -101,15 +101,21 @@ export default function Users() {
                     </td>
                     <td className="px-4 py-3 text-black/80">{row.email ?? "—"}</td>
                     <td className="px-4 py-3">
-                      {row.is_active === 1 ? (
-                        <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
-                          Verified
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700">
-                          Pending
-                        </span>
-                      )}
+                      <div className="flex flex-wrap gap-1.5">
+                        {row.status === "suspended" ? (
+                          <span className="inline-flex items-center rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-medium text-rose-700">
+                            Suspended
+                          </span>
+                        ) : row.is_active === 1 ? (
+                          <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
+                            Verified
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700">
+                            Pending
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       {row.plan === "paid" ? (

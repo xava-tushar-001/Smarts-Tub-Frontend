@@ -37,6 +37,49 @@ export const GetUserSalarySlipFile = async (id, slipId) => {
     return await instance.get(`/admin/users/${id}/salary-slips/${slipId}/file`, { responseType: 'blob' })
 }
 
+// User account actions
+export const SuspendUser = async (id) => {
+    return await instance.post(`/admin/users/${id}/suspend`)
+}
+
+export const ReactivateUser = async (id) => {
+    return await instance.post(`/admin/users/${id}/reactivate`)
+}
+
+export const DeleteUser = async (id) => {
+    return await instance.delete(`/admin/users/${id}`)
+}
+
+export const OverrideUserPlan = async (id, plan) => {
+    return await instance.put(`/admin/users/${id}/plan`, { plan })
+}
+
+// Payroll / Finch connection monitoring
+export const GetPayrollConnections = async (data) => {
+    return await instance.get('/admin/payroll-connections', { params: data })
+}
+
+export const RetryPayrollSync = async (id) => {
+    return await instance.post(`/admin/payroll-connections/${id}/sync`)
+}
+
+export const AdminDisconnectPayroll = async (id) => {
+    return await instance.post(`/admin/payroll-connections/${id}/disconnect`)
+}
+
+// Salary slip manual correction
+export const GetAdminSalarySlip = async (id) => {
+    return await instance.get(`/admin/salary-slips/${id}`)
+}
+
+export const OverrideSalarySlip = async (id, data) => {
+    return await instance.put(`/admin/salary-slips/${id}`, data)
+}
+
+export const RetryAdminSalarySlip = async (id) => {
+    return await instance.post(`/admin/salary-slips/${id}/retry`)
+}
+
 // Profile
 export const GetProfile = async () => {
     return await instance.get('/admin/profile')

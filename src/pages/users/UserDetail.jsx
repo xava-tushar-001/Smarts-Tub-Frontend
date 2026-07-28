@@ -2,7 +2,15 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { HiOutlineArrowLeft, HiOutlineCreditCard, HiOutlineDocumentMagnifyingGlass, HiOutlineChevronRight } from "react-icons/hi2";
-import { GetUserDetail, GetUserPayments, GetUserSalarySlips } from "../../api/api_client";
+import {
+  GetUserDetail,
+  GetUserPayments,
+  GetUserSalarySlips,
+  SuspendUser,
+  ReactivateUser,
+  DeleteUser,
+  OverrideUserPlan,
+} from "../../api/api_client";
 
 function readError(err, fallback) {
   const msg =
@@ -30,6 +38,10 @@ export default function UserDetail() {
   const [user, setUser] = useState(null);
   const [paymentsTotal, setPaymentsTotal] = useState(0);
   const [slipsTotal, setSlipsTotal] = useState(0);
+  const [statusActing, setStatusActing] = useState(false);
+  const [planActing, setPlanActing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [planDraft, setPlanDraft] = useState("free");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -39,7 +51,9 @@ export default function UserDetail() {
         GetUserPayments(id, { page: 1 }),
         GetUserSalarySlips(id, { page: 1 }),
       ]);
-      setUser(userRes.data?.body?.user ?? null);
+      const loadedUser = userRes.data?.body?.user ?? null;
+      setUser(loadedUser);
+      setPlanDraft(loadedUser?.plan ?? "free");
       setPaymentsTotal(paymentsRes.data?.body?.pagination?.total ?? 0);
       setSlipsTotal(slipsRes.data?.body?.pagination?.total ?? 0);
     } catch (err) {
@@ -52,6 +66,57 @@ export default function UserDetail() {
   useEffect(() => {
     load();
   }, [load]);
+
+  async function handleSuspendToggle() {
+    const suspending = user.status !== "suspended";
+    if (suspending && !window.confirm(`Suspend ${user.email}? They'll be signed out immediately and won't be able to log back in.`)) {
+      return;
+    }
+    setStatusActing(true);
+    try {
+      if (suspending) {
+        await SuspendUser(id);
+        toast.success("User suspended.");
+      } else {
+        await ReactivateUser(id);
+        toast.success("User reactivated.");
+      }
+      await load();
+    } catch (err) {
+      toast.error(readError(err, "Could not update this account's status."));
+    } finally {
+      setStatusActing(false);
+    }
+  }
+
+  async function handleSavePlan() {
+    if (planDraft === user.plan) return;
+    setPlanActing(true);
+    try {
+      await OverrideUserPlan(id, planDraft);
+      toast.success(`Plan overridden to ${planDraft === "paid" ? "Pro" : "Free"}.`);
+      await load();
+    } catch (err) {
+      toast.error(readError(err, "Could not update this user's plan."));
+    } finally {
+      setPlanActing(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!window.confirm(`Delete ${user.email}? This removes their access immediately. Their existing payslips and payment records are kept for the books.`)) {
+      return;
+    }
+    setDeleting(true);
+    try {
+      await DeleteUser(id);
+      toast.success("User deleted.");
+      navigate("/users");
+    } catch (err) {
+      toast.error(readError(err, "Could not delete this user."));
+      setDeleting(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -87,13 +152,20 @@ export default function UserDetail() {
             <h1 className="text-3xl font-bold tracking-tight text-slate-800">{user.name || "—"}</h1>
             <p className="mt-1 text-slate-500">{user.email}</p>
           </div>
-          <span
-            className={`rounded-full px-3 py-1 text-xs font-semibold ${
-              isPaid ? "bg-indigo-50 text-indigo-600" : "bg-slate-100 text-slate-600"
-            }`}
-          >
-            {isPaid ? "Paid" : "Free"}
-          </span>
+          <div className="flex items-center gap-2">
+            {user.status === "suspended" && (
+              <span className="rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-600">
+                Suspended
+              </span>
+            )}
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                isPaid ? "bg-indigo-50 text-indigo-600" : "bg-slate-100 text-slate-600"
+              }`}
+            >
+              {isPaid ? "Paid" : "Free"}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -118,6 +190,77 @@ export default function UserDetail() {
             <dd className="mt-0.5 font-medium text-slate-800">{formatDate(user.createdAt)}</dd>
           </div>
         </dl>
+      </div>
+
+      {/* Account management */}
+      <div className="mb-6 max-w-5xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="text-sm font-semibold text-slate-500">Manage Account</h2>
+        <div className="mt-4 grid gap-6 sm:grid-cols-2">
+          <div>
+            <p className="text-xs text-slate-400">Account status</p>
+            <div className="mt-2 flex items-center gap-3">
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                  user.status === "suspended" ? "bg-rose-50 text-rose-600" : "bg-green-50 text-green-700"
+                }`}
+              >
+                {user.status === "suspended" ? "Suspended" : "Active"}
+              </span>
+              <button
+                type="button"
+                onClick={handleSuspendToggle}
+                disabled={statusActing}
+                className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60 ${
+                  user.status === "suspended"
+                    ? "border-slate-200 text-slate-700 hover:bg-slate-50"
+                    : "border-rose-200 text-rose-600 hover:bg-rose-50"
+                }`}
+              >
+                {statusActing ? "Working…" : user.status === "suspended" ? "Reactivate" : "Suspend"}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs text-slate-400">Plan override</p>
+            <div className="mt-2 flex items-center gap-3">
+              <select
+                value={planDraft}
+                onChange={(e) => setPlanDraft(e.target.value)}
+                className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100"
+              >
+                <option value="free">Free</option>
+                <option value="paid">Pro</option>
+              </select>
+              <button
+                type="button"
+                onClick={handleSavePlan}
+                disabled={planActing || planDraft === user.plan}
+                className="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {planActing ? "Saving…" : "Save"}
+              </button>
+            </div>
+            <p className="mt-1.5 text-xs text-slate-400">Bypasses Stripe - use for goodwill upgrades or support downgrades.</p>
+          </div>
+        </div>
+
+        <div className="mt-6 border-t border-slate-100 pt-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-rose-500">Danger zone</p>
+          <div className="mt-2 flex items-center justify-between gap-4">
+            <p className="text-sm text-slate-500">
+              Deletes this account and blocks sign-in. Their payslips and payment records are kept.
+            </p>
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={deleting}
+              className="shrink-0 rounded-lg border border-rose-200 px-3 py-1.5 text-sm font-medium text-rose-600 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {deleting ? "Deleting…" : "Delete Account"}
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Links to detail pages */}

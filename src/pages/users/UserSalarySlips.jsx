@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { HiOutlineArrowLeft, HiOutlineEye } from "react-icons/hi2";
+import { HiOutlineArrowLeft, HiOutlineEye, HiOutlinePencilSquare } from "react-icons/hi2";
 import { GetUserDetail, GetUserSalarySlips, GetUserSalarySlipFile } from "../../api/api_client";
 import { OverallBadge } from "./statusBadge";
 
@@ -137,15 +137,24 @@ export default function UserSalarySlips() {
                         : "—"}
                     </td>
                     <td className="px-6 py-3 text-right">
-                      <button
-                        type="button"
-                        onClick={() => handleViewFile(slip.id)}
-                        disabled={openingFile === slip.id}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
-                      >
-                        <HiOutlineEye className="h-4 w-4" aria-hidden />
-                        View
-                      </button>
+                      <div className="flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleViewFile(slip.id)}
+                          disabled={openingFile === slip.id}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                          <HiOutlineEye className="h-4 w-4" aria-hidden />
+                          View
+                        </button>
+                        <Link
+                          to={`/users/${id}/salary-slips/${slip.id}`}
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-indigo-700"
+                        >
+                          <HiOutlinePencilSquare className="h-4 w-4" aria-hidden />
+                          Review
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))
