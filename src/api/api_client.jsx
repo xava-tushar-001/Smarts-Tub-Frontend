@@ -114,3 +114,20 @@ export const SyncPayroll = async () => {
 export const GetPayrollHistory = async (params) => {
     return await instance.get('/users/payroll/history', { params })
 }
+
+// Support tickets
+export const CreateSupportTicket = async (data) => {
+    return await instance.post('/users/support-tickets', data)
+}
+
+export const GetSupportTickets = async (params) => {
+    return await instance.get('/users/support-tickets', { params })
+}
+
+export const GetSupportTicket = async (id) => {
+    return await instance.get(`/users/support-tickets/${id}`)
+}
+
+export const AddSupportTicketMessage = async (id, message) => {
+    return await instance.post(`/users/support-tickets/${id}/messages`, { message })
+}

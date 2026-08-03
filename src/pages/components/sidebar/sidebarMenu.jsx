@@ -4,6 +4,7 @@ import {
   HiOutlineCreditCard,
   HiOutlineChartBar,
   HiOutlineLink,
+  HiOutlineLifebuoy,
 } from "react-icons/hi2";
 
 /**
@@ -39,5 +40,11 @@ export const sidebarMenu = [
     link: "/billing",
     icon: HiOutlineCreditCard,
     end: true,
+  },
+  {
+    title: "Support",
+    link: "/support",
+    icon: HiOutlineLifebuoy,
+    end: false,
   },
 ];

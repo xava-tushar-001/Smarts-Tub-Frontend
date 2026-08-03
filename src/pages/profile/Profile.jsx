@@ -102,6 +102,30 @@ export default function Profile() {
                 : "—"}
             </dd>
           </div>
+          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-slate-500">Plan</dt>
+            <dd className="text-sm text-slate-800 sm:col-span-2">
+              <span
+                className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${
+                  user?.plan === "paid" ? "bg-[#eef2df] text-[#17352a]" : "bg-slate-100 text-slate-600"
+                }`}
+              >
+                {user?.plan === "paid" ? "Pro" : "Free"}
+              </span>
+            </dd>
+          </div>
+          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-slate-500">Valid Until</dt>
+            <dd className="text-sm text-slate-800 sm:col-span-2">
+              {user?.current_period_end
+                ? new Date(user.current_period_end).toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })
+                : "—"}
+            </dd>
+          </div>
         </dl>
       </div>
     </div>

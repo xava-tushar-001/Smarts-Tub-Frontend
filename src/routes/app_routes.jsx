@@ -15,6 +15,9 @@ import SalarySlipDetail from "../pages/salarySlips/SalarySlipDetail";
 import Billing from "../pages/billing/Billing";
 import ConnectPayroll from "../pages/payroll/ConnectPayroll";
 import EarningsDashboard from "../pages/payroll/EarningsDashboard";
+import Support from "../pages/support/Support";
+import CreateSupportTicket from "../pages/support/CreateSupportTicket";
+import SupportTicketDetail from "../pages/support/SupportTicketDetail";
 import PlanSelection from "../pages/onboarding/PlanSelection";
 import LandingPage from "../pages/LandingPage";
 
@@ -48,6 +51,9 @@ export const router = createBrowserRouter([
           { path: "/billing", element: <Billing /> },
           { path: "/payroll", element: <ConnectPayroll /> },
           { path: "/earnings", element: <EarningsDashboard /> },
+          { path: "/support", element: <Support /> },
+          { path: "/support/new", element: <CreateSupportTicket /> },
+          { path: "/support/:id", element: <SupportTicketDetail /> },
         ],
       },
     ],
