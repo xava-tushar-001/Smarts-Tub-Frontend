@@ -20,6 +20,8 @@ import {
   HiOutlineDocumentMagnifyingGlass,
   HiOutlineLink,
   HiOutlineExclamationTriangle,
+  HiOutlineCheckCircle,
+  HiOutlineNoSymbol,
 } from "react-icons/hi2";
 
 const PLAN_COLORS = { free: "#94a3b8", paid: "#6366f1" };
@@ -48,6 +50,8 @@ export default function Home() {
     users: 0,
     free_users: 0,
     paid_users: 0,
+    active_users: 0,
+    disabled_users: 0,
     salary_slips: 0,
     payroll_connected: 0,
     payroll_reauth_required: 0,
@@ -86,6 +90,24 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="mt-3 text-2xl font-bold text-slate-800">{totals.users}</p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-slate-500">Active Users</p>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-50 text-green-600">
+                    <HiOutlineCheckCircle className="h-5 w-5" aria-hidden />
+                  </div>
+                </div>
+                <p className="mt-3 text-2xl font-bold text-slate-800">{totals.active_users}</p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-slate-500">Disabled Users</p>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-50 text-rose-600">
+                    <HiOutlineNoSymbol className="h-5 w-5" aria-hidden />
+                  </div>
+                </div>
+                <p className="mt-3 text-2xl font-bold text-slate-800">{totals.disabled_users}</p>
               </div>
               <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div className="flex items-center justify-between">

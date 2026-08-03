@@ -88,3 +88,20 @@ export const GetProfile = async () => {
 export const UpdateProfile = async (data) => {
     return await instance.put('/admin/profile', data)
 }
+
+// Support tickets
+export const GetTickets = async (data) => {
+    return await instance.get('/admin/support-tickets', { params: data })
+}
+
+export const GetTicketDetail = async (id) => {
+    return await instance.get(`/admin/support-tickets/${id}`)
+}
+
+export const UpdateTicketStatus = async (id, status) => {
+    return await instance.put(`/admin/support-tickets/${id}`, { status })
+}
+
+export const ReplyToTicket = async (id, message) => {
+    return await instance.post(`/admin/support-tickets/${id}/messages`, { message })
+}

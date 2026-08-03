@@ -13,6 +13,8 @@ import UserSalarySlips from "../pages/users/UserSalarySlips";
 import SalarySlipReview from "../pages/users/SalarySlipReview";
 import PayrollConnections from "../pages/payroll/PayrollConnections";
 import Profile from "../pages/profile/Profile";
+import Tickets from "../pages/tickets/Tickets";
+import TicketDetail from "../pages/tickets/TicketDetail";
 
 export const router = createBrowserRouter([
   // {
@@ -39,6 +41,8 @@ export const router = createBrowserRouter([
           { path: "/users/:id/salary-slips/:slipId", element: <SalarySlipReview /> },
           { path: "/payroll", element: <PayrollConnections /> },
           { path: "/subscriber", element: <Subscriber /> },
+          { path: "/tickets", element: <Tickets /> },
+          { path: "/tickets/:id", element: <TicketDetail /> },
           { path: "/profile", element: <Profile /> },
         ],
       },
