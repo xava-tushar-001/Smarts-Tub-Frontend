@@ -19,8 +19,10 @@ import {
   HiOutlineExclamationTriangle,
   HiOutlineXCircle,
   HiOutlineSparkles,
+  HiOutlineBanknotes,
+  HiOutlineCalendarDays,
 } from "react-icons/hi2";
-import { GetProfile, GetSalarySlipStats } from "../api/api_client";
+import { GetProfile, GetSalarySlipStats, GetBillingStatus } from "../api/api_client";
 
 const STATUS_COLORS = { pass: "#3f7d3a", warning: "#c1602f", error: "#b6472f" };
 
@@ -28,6 +30,33 @@ function greetingForHour(hour) {
   if (hour < 12) return "Good morning";
   if (hour < 18) return "Good afternoon";
   return "Good evening";
+}
+
+function formatMoney(value) {
+  const n = Number(value) || 0;
+  return n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function formatDate(value) {
+  if (!value) return "—";
+  return new Date(value).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+function SummaryCard({ label, value, icon: Icon, bg, color }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-5">
+      <div className="flex items-start justify-between gap-2">
+        <p className="text-sm text-slate-500">{label}</p>
+        <div
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+          style={{ background: bg, color }}
+        >
+          <Icon className="h-5 w-5" aria-hidden />
+        </div>
+      </div>
+      <p className="mt-3 text-2xl font-bold text-slate-900">{value}</p>
+    </div>
+  );
 }
 
 function buildInsight(totals) {
@@ -46,11 +75,15 @@ export default function Home() {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
+  const [billing, setBilling] = useState(null);
   const now = new Date();
 
   useEffect(() => {
     GetProfile()
       .then((res) => setName(res.data?.body?.user?.name ?? ""))
+      .catch(() => {});
+    GetBillingStatus()
+      .then((res) => setBilling(res.data?.body ?? null))
       .catch(() => {});
     GetSalarySlipStats()
       .then((res) => setStats(res.data?.body ?? null))
@@ -58,7 +91,10 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, []);
 
-  const totals = stats?.totals ?? { total: 0, pass: 0, warning: 0, error: 0 };
+  const totals = stats?.totals ?? { total: 0, pass: 0, warning: 0, error: 0, gross_pay: 0, net_pay: 0, tax_deduction: 0 };
+  const usage = billing?.usage ?? { count: 0, limit: 3 };
+  const remainingUploads = Math.max(0, usage.limit - usage.count);
+  const isPaid = billing?.plan === "paid";
   const monthlyUploads = stats?.monthly_uploads ?? [];
   const pieData = [
     { key: "pass", label: "Passed", value: totals.pass },
@@ -67,6 +103,12 @@ export default function Home() {
   ].filter((d) => d.value > 0);
   const insight = buildInsight(totals);
   const firstName = name ? name.split(" ")[0] : "";
+  const salaryBreakdown = [
+    { key: "gross", label: "Gross Pay", value: totals.gross_pay },
+    { key: "net", label: "Net Pay", value: totals.net_pay },
+    { key: "tax", label: "Tax Deduction", value: totals.tax_deduction },
+  ];
+  const SALARY_COLORS = { gross: "#3f7d3a", net: "#17352a", tax: "#c1602f" };
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
@@ -91,6 +133,14 @@ export default function Home() {
           Upload payslip
         </Link>
       </div>
+
+      {/* Earnings & subscription summary */}
+      {/* <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+        <SummaryCard label="Total Earnings" value={formatMoney(totals.net_pay)} icon={HiOutlineBanknotes} bg="#e9f2e0" color="#3f7d3a" />
+        <SummaryCard label="Current Subscription Plan" value={isPaid ? "Pro" : "Free"} icon={HiOutlineSparkles} bg="#eef2df" color="#17352a" />
+        <SummaryCard label="Plan Valid Until" value={isPaid ? formatDate(billing?.current_period_end) : "—"} icon={HiOutlineCalendarDays} bg="#fbe6d8" color="#c1602f" />
+        <SummaryCard label="Remaining Uploads" value={`${remainingUploads} / ${usage.limit}`} icon={HiOutlineArrowUpTray} bg="#e0ecf2" color="#2f6e8a" />
+      </div> */}
 
       {loading ? (
         <p className="text-slate-500">Loading your stats…</p>
@@ -211,6 +261,30 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          {/* Salary breakdown */}
+          {(totals.gross_pay > 0 || totals.net_pay > 0 || totals.tax_deduction > 0) && (
+            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-sm font-semibold text-slate-700">Salary breakdown</h2>
+              <p className="mt-1 text-xs text-slate-400">Totals across all completed payslips</p>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={salaryBreakdown}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#EFEDE4" vertical={false} />
+                  <XAxis dataKey="label" tick={{ fill: "#8a8a7a", fontSize: 12 }} axisLine={{ stroke: "#EFEDE4" }} />
+                  <YAxis tick={{ fill: "#8a8a7a", fontSize: 12 }} axisLine={{ stroke: "#EFEDE4" }} />
+                  <Tooltip
+                    contentStyle={{ borderRadius: 12, border: "1px solid #EFEDE4" }}
+                    formatter={(value) => [formatMoney(value), ""]}
+                  />
+                  <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                    {salaryBreakdown.map((entry) => (
+                      <Cell key={entry.key} fill={SALARY_COLORS[entry.key]} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </>
       )}
     </div>

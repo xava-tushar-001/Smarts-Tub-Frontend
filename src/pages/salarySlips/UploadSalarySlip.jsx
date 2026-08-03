@@ -130,7 +130,7 @@ export default function UploadSalarySlip() {
 
       {!loadingUsage && usage && (
         <p className="mb-4 max-w-5xl text-sm text-slate-500">
-          {usage.count} of {usage.limit} payslips used this month
+          {usage.count} of {usage.limit} payslips used this billing period
         </p>
       )}
 
@@ -138,10 +138,10 @@ export default function UploadSalarySlip() {
         <div className="max-w-5xl rounded-2xl border border-[#d7dfc0] bg-[#eef2df] p-8 text-center">
           <HiOutlineLockClosed className="mx-auto h-8 w-8 text-[#17352a]" aria-hidden />
           <p className="mt-3 font-semibold text-slate-800">
-            You've used all {usage.limit} payslip uploads this month
+            You've used all {usage.limit} payslip uploads on your current plan
           </p>
           <p className="mt-1 text-sm text-slate-600">
-            Upgrade to Pro for up to 12 uploads/month and more.
+            Upgrade to Pro for 10 additional uploads per billing period and more.
           </p>
           <Link
             to="/billing"

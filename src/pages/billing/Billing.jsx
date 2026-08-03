@@ -132,7 +132,7 @@ export default function Billing() {
           <div className="mt-4">
             <div className="flex items-center justify-between text-sm text-slate-600">
               <span>
-                {usageCount} of {usageLimit} payslips used this month
+                {usageCount} of {usageLimit} payslips used this billing period
               </span>
               <span className="font-medium text-slate-800">{usagePct}%</span>
             </div>
@@ -195,7 +195,7 @@ export default function Billing() {
               <ul className="mt-2 space-y-1.5 text-sm text-slate-600">
                 <li className="flex items-center gap-2">
                   <HiOutlineCheckCircle className="h-4 w-4 shrink-0 text-[#17352a]" aria-hidden />
-                  Up to 12 payslip uploads / month
+                  10 additional payslip uploads per billing period (13 total)
                 </li>
                 <li className="flex items-center gap-2">
                   <HiOutlineCheckCircle className="h-4 w-4 shrink-0 text-[#17352a]" aria-hidden />

@@ -106,7 +106,7 @@ export default function PlanSelection() {
             <ul className="mt-6 flex-1 space-y-3 text-sm text-slate-600">
               <li className="flex items-center gap-2">
                 <HiOutlineCheckCircle className="h-4 w-4 shrink-0 text-[#17352a]" aria-hidden />
-                Up to 12 payslip uploads / month
+                10 additional payslip uploads per billing period (13 total)
               </li>
               <li className="flex items-center gap-2">
                 <HiOutlineCheckCircle className="h-4 w-4 shrink-0 text-[#17352a]" aria-hidden />
