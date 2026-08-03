@@ -252,7 +252,7 @@
 
 
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   HiOutlineArrowLeft,
@@ -265,8 +265,10 @@ import {
   HiOutlineCalendar,
   HiOutlineUser,
   HiOutlineBuildingOffice,
+  HiOutlineArrowDownTray,
+  HiOutlineLockClosed,
 } from "react-icons/hi2";
-import { GetSalarySlip, GetSalarySlipFile, RetrySalarySlip } from "../../api/api_client";
+import { GetSalarySlip, GetSalarySlipFile, RetrySalarySlip, GetSalarySlipReport, GetBillingStatus } from "../../api/api_client";
 import { OverallBadge } from "./statusBadge";
 
 function readError(err, fallback) {
@@ -341,6 +343,8 @@ export default function SalarySlipDetail() {
   const [viewingFile, setViewingFile] = useState(false);
   const [retrying, setRetrying] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
+  const [isPaid, setIsPaid] = useState(false);
+  const [downloadingReport, setDownloadingReport] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -357,6 +361,36 @@ export default function SalarySlipDetail() {
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await GetBillingStatus();
+        setIsPaid((res.data?.body?.plan ?? "free") === "paid");
+      } catch {
+        setIsPaid(false);
+      }
+    })();
+  }, []);
+
+  async function handleDownloadReport() {
+    setDownloadingReport(true);
+    try {
+      const res = await GetSalarySlipReport(id);
+      const url = URL.createObjectURL(res.data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${slip?.file_name || "salary-slip"}-report.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      toast.error(readError(err, "Could not download the report."));
+    } finally {
+      setDownloadingReport(false);
+    }
+  }
 
   async function handleRetry() {
     setRetrying(true);
@@ -425,6 +459,14 @@ export default function SalarySlipDetail() {
       </div>
     );
   }
+
+  const salaryDetails = slip.salary_details || {};
+  const salaryDetailRows = [
+    ["Gross Pay", salaryDetails.gross_pay],
+    ["Net Pay", salaryDetails.net_pay],
+    ["Tax Deduction", salaryDetails.tax_deduction],
+    ...(Array.isArray(salaryDetails.other) ? salaryDetails.other.map((d) => [d.label, d.value]) : []),
+  ].filter(([, value]) => value);
 
   const allChecks = Array.isArray(slip.checks) ? slip.checks : [];
   const checksByStatus = {
@@ -516,6 +558,27 @@ export default function SalarySlipDetail() {
                     <HiOutlineEye className="h-4 w-4" />
                     View Original
                   </button>
+                  {slip.status === "completed" && (
+                    isPaid ? (
+                      <button
+                        type="button"
+                        onClick={handleDownloadReport}
+                        disabled={downloadingReport}
+                        className="inline-flex items-center gap-2 rounded-xl bg-[#17352a] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-[#0f2820] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <HiOutlineArrowDownTray className="h-4 w-4" />
+                        {downloadingReport ? "Preparing…" : "Download Report"}
+                      </button>
+                    ) : (
+                      <Link
+                        to="/billing"
+                        className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-500 shadow-sm transition hover:bg-slate-50"
+                      >
+                        <HiOutlineLockClosed className="h-4 w-4" />
+                        Pro: Download Report
+                      </Link>
+                    )
+                  )}
                 </div>
               </div>
             </div>
@@ -691,6 +754,28 @@ export default function SalarySlipDetail() {
                 )}
               </div>
             </div>
+
+            {/* Salary Details Section */}
+            {salaryDetailRows.length > 0 && (
+              <div className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className="p-6 sm:p-8">
+                  <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">Salary Details</h2>
+                  <div className="mt-4 overflow-x-auto">
+                    <table className="w-full min-w-[360px] border-collapse text-left text-sm">
+                      <tbody>
+                        {salaryDetailRows.map(([label, value]) => (
+                          <tr key={label} className="border-b border-slate-100 last:border-0">
+                            <td className="w-1/3 py-3 pr-4 font-medium text-slate-600">{label}</td>
+                            <td className="py-3 text-slate-800">{value}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+
           </>
         )}
       </div>

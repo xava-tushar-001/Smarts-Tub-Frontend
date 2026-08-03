@@ -73,6 +73,10 @@ export const GetSalarySlipFile = async (id) => {
     return await instance.get(`/users/salary-slips/${id}/file`, { responseType: 'blob' })
 }
 
+export const GetSalarySlipReport = async (id) => {
+    return await instance.get(`/users/salary-slips/${id}/report`, { responseType: 'blob' })
+}
+
 export const RetrySalarySlip = async (id) => {
     return await instance.post(`/users/salary-slips/${id}/retry`)
 }
