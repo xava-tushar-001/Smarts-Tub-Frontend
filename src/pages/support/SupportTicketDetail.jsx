@@ -120,7 +120,7 @@ export default function SupportTicketDetail() {
         </div>
       </div>
 
-      <div className="max-w-3xl space-y-4">
+      <div className="max-w-5xl space-y-4">
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">Description</h2>
           <p className="mt-3 whitespace-pre-wrap text-slate-700">{ticket.description}</p>

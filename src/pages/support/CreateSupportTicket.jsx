@@ -55,7 +55,7 @@ export default function CreateSupportTicketPage() {
         <p className="mt-1 text-slate-500">Tell us what's going on and we'll get back to you.</p>
       </div>
 
-      <div className="max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <form onSubmit={handleSave} className="space-y-5 px-4 py-5 sm:px-6 sm:py-6">
           <div>
             <label htmlFor="subject" className="block text-sm font-semibold text-slate-700 mb-1.5">
