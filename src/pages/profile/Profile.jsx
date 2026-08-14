@@ -2,7 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
+import { FaCrown } from "react-icons/fa";
+import { HiOutlineClock, HiOutlineMail, HiOutlineCalendar, HiOutlineUser, HiOutlineDocumentText } from "react-icons/hi";
 import { GetProfile } from "../../api/api_client";
+import { motion } from "framer-motion";
 
 function readError(err, fallback) {
   const msg =
@@ -18,6 +21,21 @@ function initialsOf(name, email) {
   const parts = source.split(/\s+/).filter(Boolean);
   if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
   return source.slice(0, 2).toUpperCase();
+}
+
+function getPlanBadge(plan) {
+  if (plan === "paid") {
+    return {
+      label: "Pro",
+      icon: FaCrown,
+      className: "bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-lg shadow-amber-500/30"
+    };
+  }
+  return {
+    label: "Free",
+    icon: null,
+    className: "bg-gradient-to-r from-slate-100 to-slate-200 text-slate-600"
+  };
 }
 
 export default function Profile() {
@@ -42,92 +60,148 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="p-4 sm:p-6 lg:p-8">
-        <p className="text-slate-500">Loading profile…</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 sm:p-6 lg:p-8 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-[#17352a] border-t-transparent"></div>
+          <p className="mt-4 text-slate-500 font-medium">Loading your profile…</p>
+        </div>
       </div>
     );
   }
 
-  return (
-    <div className="p-4 sm:p-6 lg:p-8">
-      <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl">Profile</h1>
-        <p className="mt-1 text-slate-500">Manage your account details</p>
-      </div>
+  const PlanBadge = getPlanBadge(user?.plan);
+  const PlanIcon = PlanBadge.icon;
 
-      <div className="max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex flex-col gap-4 border-b border-slate-100 bg-slate-50 px-4 py-5 sm:flex-row sm:items-center sm:px-6 sm:py-6">
-          <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#eef2df] text-xl font-semibold text-[#17352a]">
-              {initialsOf(user?.name, user?.email)}
-            </div>
-            <div className="min-w-0">
-              <div className="truncate text-lg font-semibold text-slate-800">
-                {user?.name || "Add your name"}
-              </div>
-              <div className="truncate text-sm text-slate-500">{user?.email}</div>
-            </div>
-          </div>
-          <Link
-            to="/profile/edit"
-            className="flex shrink-0 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 sm:ml-auto sm:justify-start"
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-4 sm:p-6 lg:p-8">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-5xl mx-auto"
+      >
+        {/* Header */}
+        <div className="mb-8">
+          <motion.h1 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl bg-gradient-to-r from-[#17352a] to-[#2a5a48] bg-clip-text text-transparent"
           >
-            <HiOutlinePencilSquare className="h-4 w-4" aria-hidden />
-            Edit Profile
-          </Link>
+            Profile
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mt-2 text-slate-500 text-lg"
+          >
+            Manage your account details and preferences
+          </motion.p>
         </div>
 
-        <dl className="divide-y divide-slate-100">
-          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-slate-500">Full Name</dt>
-            <dd className="text-sm text-slate-800 sm:col-span-2">{user?.name || "—"}</dd>
-          </div>
-          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-slate-500">Email</dt>
-            <dd className="break-all text-sm text-slate-800 sm:col-span-2">{user?.email || "—"}</dd>
-          </div>
-          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-slate-500">About</dt>
-            <dd className="text-sm text-slate-800 sm:col-span-2">{user?.about || "—"}</dd>
-          </div>
-          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-slate-500">Member Since</dt>
-            <dd className="text-sm text-slate-800 sm:col-span-2">
-              {user?.createdAt
-                ? new Date(user.createdAt).toLocaleDateString("en-IN", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })
-                : "—"}
-            </dd>
-          </div>
-          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-slate-500">Plan</dt>
-            <dd className="text-sm text-slate-800 sm:col-span-2">
-              <span
-                className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${
-                  user?.plan === "paid" ? "bg-[#eef2df] text-[#17352a]" : "bg-slate-100 text-slate-600"
-                }`}
+        {/* Main Card */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="overflow-hidden rounded-3xl border border-slate-200/60 bg-white/80 backdrop-blur-xl shadow-2xl shadow-slate-200/50"
+        >
+          {/* Profile Header */}
+          <div className="relative overflow-hidden bg-gradient-to-r from-[#17352a] to-[#2a5a48] px-6 py-8 sm:px-8 sm:py-10">
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-white/20 blur-3xl"></div>
+              <div className="absolute -bottom-32 -left-32 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
+            </div>
+            
+            <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center">
+              <div className="flex items-center gap-6">
+                <motion.div 
+                  whileHover={{ scale: 1.05 }}
+                  className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-2xl font-bold text-white shadow-xl ring-4 ring-white/30"
+                >
+                  {initialsOf(user?.name, user?.email)}
+                  <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-emerald-400 ring-2 ring-white"></div>
+                </motion.div>
+                <div>
+                  <h2 className="text-2xl font-bold text-white">
+                    {user?.name || "Add your name"}
+                  </h2>
+                  <p className="text-white/80 flex items-center gap-2">
+                    <HiOutlineMail className="h-4 w-4" />
+                    {user?.email}
+                  </p>
+                </div>
+              </div>
+              
+              <Link
+                to="/profile/edit"
+                className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-white/20 backdrop-blur-sm px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-white/30 hover:scale-105 sm:ml-auto shadow-lg"
               >
-                {user?.plan === "paid" ? "Pro" : "Free"}
-              </span>
-            </dd>
+                <HiOutlinePencilSquare className="h-4 w-4" aria-hidden />
+                Edit Profile
+              </Link>
+            </div>
           </div>
-          <div className="grid grid-cols-1 gap-1 px-4 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-slate-500">Valid Until</dt>
-            <dd className="text-sm text-slate-800 sm:col-span-2">
-              {user?.current_period_end
-                ? new Date(user.current_period_end).toLocaleDateString("en-IN", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })
-                : "—"}
-            </dd>
-          </div>
-        </dl>
-      </div>
+
+          {/* Profile Details */}
+          <dl className="divide-y divide-slate-100">
+            {[
+              { icon: HiOutlineUser, label: "Full Name", value: user?.name || "—" },
+              { icon: HiOutlineMail, label: "Email", value: user?.email || "—" },
+              { icon: HiOutlineDocumentText, label: "About", value: user?.about || "—" },
+              { 
+                icon: HiOutlineCalendar, 
+                label: "Member Since", 
+                value: user?.createdAt 
+                  ? new Date(user.createdAt).toLocaleDateString("en-IN", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })
+                  : "—" 
+              },
+              { 
+                icon: null, 
+                label: "Plan", 
+                value: (
+                  <span className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold ${PlanBadge.className}`}>
+                    {PlanIcon && <PlanIcon className="h-3.5 w-3.5" />}
+                    {PlanBadge.label}
+                  </span>
+                )
+              },
+              { 
+                icon: HiOutlineClock, 
+                label: "Valid Until", 
+                value: user?.current_period_end 
+                  ? new Date(user.current_period_end).toLocaleDateString("en-IN", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })
+                  : "—" 
+              },
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 + index * 0.05 }}
+                className="grid grid-cols-1 gap-1 px-6 py-5 sm:grid-cols-3 sm:gap-4 hover:bg-slate-50/50 transition-colors"
+              >
+                <dt className="flex items-center gap-2 text-sm font-medium text-slate-500">
+                  {item.icon && <item.icon className="h-4 w-4" />}
+                  {item.label}
+                </dt>
+                <dd className="text-sm text-slate-800 sm:col-span-2 font-medium">
+                  {item.value}
+                </dd>
+              </motion.div>
+            ))}
+          </dl>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
