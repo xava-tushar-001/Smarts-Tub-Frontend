@@ -38,8 +38,8 @@ export const GetUserSalarySlipFile = async (id, slipId) => {
 }
 
 // User account actions
-export const SuspendUser = async (id) => {
-    return await instance.post(`/admin/users/${id}/suspend`)
+export const SuspendUser = async (id, reason) => {
+    return await instance.post(`/admin/users/${id}/suspend`, { reason })
 }
 
 export const ReactivateUser = async (id) => {

@@ -42,6 +42,8 @@ export default function UserDetail() {
   const [planActing, setPlanActing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [planDraft, setPlanDraft] = useState("free");
+  const [suspendModalOpen, setSuspendModalOpen] = useState(false);
+  const [suspendReason, setSuspendReason] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -67,23 +69,42 @@ export default function UserDetail() {
     load();
   }, [load]);
 
-  async function handleSuspendToggle() {
-    const suspending = user.status !== "suspended";
-    if (suspending && !window.confirm(`Suspend ${user.email}? They'll be signed out immediately and won't be able to log back in.`)) {
+  function handleSuspendToggle() {
+    if (user.status === "suspended") {
+      handleReactivate();
+      return;
+    }
+    setSuspendReason("");
+    setSuspendModalOpen(true);
+  }
+
+  async function handleReactivate() {
+    if (!window.confirm(`Reactivate ${user.email}?`)) {
       return;
     }
     setStatusActing(true);
     try {
-      if (suspending) {
-        await SuspendUser(id);
-        toast.success("User suspended.");
-      } else {
-        await ReactivateUser(id);
-        toast.success("User reactivated.");
-      }
+      await ReactivateUser(id);
+      toast.success("User reactivated.");
       await load();
     } catch (err) {
       toast.error(readError(err, "Could not update this account's status."));
+    } finally {
+      setStatusActing(false);
+    }
+  }
+
+  async function handleConfirmSuspend() {
+    const reason = suspendReason.trim();
+    if (!reason) return;
+    setStatusActing(true);
+    try {
+      await SuspendUser(id, reason);
+      toast.success("User suspended.");
+      setSuspendModalOpen(false);
+      await load();
+    } catch (err) {
+      toast.error(readError(err, "Could not suspend this account."));
     } finally {
       setStatusActing(false);
     }
@@ -219,6 +240,9 @@ export default function UserDetail() {
                 {statusActing ? "Working…" : user.status === "suspended" ? "Reactivate" : "Suspend"}
               </button>
             </div>
+            {user.status === "suspended" && user.suspend_reason && (
+              <p className="mt-2 text-xs text-slate-500">Reason: {user.suspend_reason}</p>
+            )}
           </div>
 
           <div>
@@ -293,6 +317,43 @@ export default function UserDetail() {
           <HiOutlineChevronRight className="h-4 w-4 shrink-0 text-slate-400" aria-hidden />
         </Link>
       </div>
+
+      {suspendModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
+          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
+            <h3 className="text-lg font-semibold text-slate-800">Suspend {user.email}</h3>
+            <p className="mt-1 text-sm text-slate-500">
+              They'll be signed out immediately and won't be able to log back in. This reason will be emailed to them.
+            </p>
+            <textarea
+              autoFocus
+              value={suspendReason}
+              onChange={(e) => setSuspendReason(e.target.value)}
+              rows={4}
+              placeholder="Reason for suspension…"
+              className="mt-4 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            />
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setSuspendModalOpen(false)}
+                disabled={statusActing}
+                className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmSuspend}
+                disabled={statusActing || !suspendReason.trim()}
+                className="rounded-lg bg-rose-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {statusActing ? "Suspending…" : "Suspend"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

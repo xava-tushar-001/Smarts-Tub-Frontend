@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { HiOutlineArrowLeft, HiOutlinePaperAirplane } from "react-icons/hi2";
 import { GetTicketDetail, UpdateTicketStatus, ReplyToTicket } from "../../api/api_client";
 import { TicketStatusBadge } from "./statusBadge";
+import { StatusDropdown } from "./StatusDropdown";
 
 function readError(err, fallback) {
   const msg =
@@ -40,8 +41,6 @@ function MessageBubble({ senderType, message, createdAt }) {
     </div>
   );
 }
-
-const STATUS_OPTIONS = ["pending", "open", "resolved"];
 
 export default function TicketDetail() {
   const { id } = useParams();
@@ -142,17 +141,7 @@ export default function TicketDetail() {
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
-            <select
-              value={statusDraft}
-              onChange={(e) => setStatusDraft(e.target.value)}
-              className="rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100"
-            >
-              {STATUS_OPTIONS.map((s) => (
-                <option key={s} value={s}>
-                  {s.charAt(0).toUpperCase() + s.slice(1)}
-                </option>
-              ))}
-            </select>
+            <StatusDropdown value={statusDraft} onChange={setStatusDraft} disabled={savingStatus} />
             <button
               type="button"
               onClick={handleStatusSave}
