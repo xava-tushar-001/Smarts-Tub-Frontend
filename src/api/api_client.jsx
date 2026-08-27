@@ -9,6 +9,10 @@ export const GetDashboardStats = async () => {
     return await instance.get('/admin/dashboard-stats')
 }
 
+export const GetEarningsGraph = async (data) => {
+    return await instance.get('/admin/earnings-graph', { params: data })
+}
+
 export const GetSubscriber = async (data) => {
     return await instance.get('/admin/subscriber-list', { params: data })
 }

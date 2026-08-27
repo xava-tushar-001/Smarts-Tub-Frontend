@@ -23,6 +23,7 @@ import {
   HiOutlineCheckCircle,
   HiOutlineNoSymbol,
 } from "react-icons/hi2";
+import { EarningsChart } from "./components/earnings";
 
 const PLAN_COLORS = { free: "#94a3b8", paid: "#6366f1" };
 
@@ -163,6 +164,9 @@ export default function Home() {
                 </Link>
               )}
             </div>
+
+            {/* Subscription revenue */}
+            <EarningsChart />
 
             {/* Charts */}
             <div className="grid gap-6 lg:grid-cols-3">
