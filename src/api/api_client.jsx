@@ -86,8 +86,8 @@ export const GetBillingStatus = async () => {
     return await instance.get('/users/billing/status')
 }
 
-export const CreateCheckoutSession = async () => {
-    return await instance.post('/users/billing/checkout')
+export const CreateCheckoutSession = async (data) => {
+    return await instance.post('/users/billing/checkout', data)
 }
 
 export const CreatePortalSession = async () => {

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { PDFDocument } from "pdf-lib";
 import { HiOutlineArrowLeft, HiOutlineDocumentArrowUp, HiOutlineXMark, HiOutlineLockClosed } from "react-icons/hi2";
 import { UploadSalarySlip as uploadSalarySlipRequest, GetBillingStatus } from "../../api/api_client";
+import { PAID_UPLOAD_LIMIT } from "../../config/plans";
 
 const ACCEPTED_TYPES = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
@@ -141,7 +142,7 @@ export default function UploadSalarySlip() {
             You've used all {usage.limit} payslip uploads on your current plan
           </p>
           <p className="mt-1 text-sm text-slate-600">
-            Upgrade to Pro for 10 additional uploads per billing period and more.
+            Upgrade to a paid plan for up to {PAID_UPLOAD_LIMIT} uploads per billing period and more.
           </p>
           <Link
             to="/billing"
